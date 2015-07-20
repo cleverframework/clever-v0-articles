@@ -1,0 +1,15 @@
+{
+  "name": "pages",
+  "version": "0.0.1",
+  "description": "Pages package",
+  "author": {
+    "name": "Jacopo Daeli <jacopo.daeli@gmail.com>"
+  },
+  "clever": "0.0.x",
+  "visible": true,
+  "dependencies": {
+    "jquery-autoselect": "0.0.2"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
