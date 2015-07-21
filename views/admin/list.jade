@@ -32,9 +32,9 @@ block content
           td
             | #{page.start}
           td
-            | #{page.end}
+            | #{page.end || 'Never'}
           td
-            | #{page.modified}  
+            | #{page.modified_ago || 'Never'}  
           td
             .btn-group
                 button.btn.btn-info.dropdown-toggle(type="button", data-toggle="dropdown", aria-expanded="false")

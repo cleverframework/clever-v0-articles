@@ -92,6 +92,14 @@ const PageSchema = new Schema({
   }
 });
 
+// Virtuals
+PageSchema.virtual('modified_ago').set(function(url) {
+  throw new Error('Page::modified_ago cannot be set.');
+}).get(function() {
+  if(this.modified === null) return null;
+  return moment(this.modified).fromNow();
+});
+
 // Static Methods
 PageSchema.statics = {
   /**
