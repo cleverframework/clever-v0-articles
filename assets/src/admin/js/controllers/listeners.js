@@ -298,10 +298,11 @@ export default (app) => {
 
     const postData = {
       title: $('#inputTitle').val(),
+      slug: $('#inputSlug').val(),
       standfirst: $('#inputStandfirst').val(),
-      start: $('#inputStart').val(),
-      end: $('#inputEnd').val(),
-      schema: [],
+      start: $('#inputStart').val().trim(' ') === '' ? undefined : $('#inputStart').val(),
+      end: $('#inputEnd').val().trim(' ') === '' ? undefined : $('#inputEnd').val(),
+      blocks: [],
       _csrf: $('#inputCsrf').val()
     };
 
@@ -310,7 +311,7 @@ export default (app) => {
       block.type = $(this).data('type');
       block.value = $(this).val();
       block.order = index;
-      postData.schema.push(block);
+      postData.blocks.push(block);
     });
 
     const options = {

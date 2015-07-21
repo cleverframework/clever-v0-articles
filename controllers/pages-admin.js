@@ -9,50 +9,37 @@ const Gallery = mongoose.model('Gallery');
 const async = require('async');
 const util = require('../util');
 
-// Show page list
+// Show user list
 exports.showPages = function(PagesPackage, req, res, next) {
-  let page = Number.parseInt(req.query.page);
-  page = Number.isNaN(page) ? 0 : page;
-  const skip = page * 10;
+
+  let activePage = Number.parseInt(req.query.page);
+  activePage = Number.isNaN(activePage) ? 0 : activePage;
+  const skip = activePage * 10;
 
   function renderPageList(pages, nPages) {
-    console.log('Rendering pages...');
     try {
       res.send(PagesPackage.render('admin/list', {
         packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
         user: req.user,
         pages: pages,
         nPages: nPages,
-        activePage: page,
+        activePage: activePage,
         csrfToken: req.csrfToken()
       }));
-    } catch (e) {
-      next(e);
+    } catch(e) {
+      util.passNext(next, e);
     }
   }
 
   async.parallel([
     function getPages(cb){
       Page.getPages(skip, 10)
-        .then(function(pages) {
-          async.each(pages, function(page, done) {
-            page.loadImages()
-              .then(function() {
-                done();
-              })
-              .catch(done);
-          }, function(err) {
-            if(err) return cb(err);
-            cb(null, pages);
-          });
-        })
+        .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     },
     function countPages(cb){
       Page.countPages()
-        .then(function(nPages) {
-          cb(null, nPages);
-        })
+        .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     }
   ], function(err, options){
@@ -64,23 +51,6 @@ exports.showPages = function(PagesPackage, req, res, next) {
 
 exports.showPage = function(PagesPackage, req, res, next) {
 
-  function render(pageToShow, images) {
-    res.send(PagesPackage.render('admin/page/details', {
-      packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
-      user: req.user,
-      pageToShow: pageToShow,
-      images: images,
-      csrfToken: req.csrfToken()
-    }));
-  }
-
-  Page.getPageById(req.params.id)
-    .then(function(pageToShow) {
-      pageToShow.loadImages()
-        .then(render.bind(null, pageToShow))
-        .catch(util.passNext.bind(null, next))
-    })
-    .catch(util.passNext.bind(null, next));
 };
 
 exports.createPage = function(PagesPackage, req, res, next) {
@@ -106,16 +76,5 @@ exports.createPage = function(PagesPackage, req, res, next) {
 };
 
 exports.editPage = function(PagesPackage, req, res, next) {
-  function render(pageToEdit) {
-    res.send(PagesPackage.render(`admin/page/edit`, {
-      packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
-      user: req.user,
-      pageToEdit: pageToEdit,
-      csrfToken: req.csrfToken()
-    }));
-  }
 
-  Page.getPageById(req.params.id)
-    .then(render)
-    .catch(util.passNext.bind(null, next));
 };

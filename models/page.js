@@ -34,6 +34,22 @@ function hasErrors(err) {
   return null;
 }
 
+// Validations
+function validateUniqueSlug(value, callback) {
+  const Page = mongoose.model('Page');
+  Page.find({
+    $and: [{
+      slug: value
+    }, {
+      _id: {
+        $ne: this._id
+      }
+    }]
+  }, function(err, gallery) {
+    callback(err || gallery.length === 0);
+  });
+};
+
 // Getter
 function escapeProperty(value) {
   return _.escape(value);
@@ -43,13 +59,27 @@ function escapeProperty(value) {
 const PageSchema = new Schema({
   title: {
     type: String,
-    default: 'Untitled',
+    required: true,
     get: escapeProperty
+  },
+  slug: {
+    type: String,
+    required: true,
+    unique: true,
+    // TODO: match valid slug chars
+    validate: [validateUniqueSlug, 'Slug is already in-use']
   },
   standfirst: {
     type: String,
     default: '',
     get: escapeProperty
+  },
+  start: {
+    type: Date,
+    default: Date.now
+  },
+  end: {
+    type: Date
   },
   blocks: {},
   created: {
@@ -165,36 +195,24 @@ PageSchema.statics = {
     const Page = mongoose.model('Page');
     const defer = Q.defer();
 
-    Page.getPageById(id)
-      .then(function(page) {
-        storage.deletePage(page.key)
-          .then(function() {
-            Page.remove({_id: page._id}, function(err, result) {
-              if (err) return defer.reject(err);
-              return defer.resolve(result);
-            });
-          })
-          .catch(defer.reject);
-      })
-      .catch(defer.reject);
+    Page.remove({_id: page._id}, function(err, result) {
+      if (err) return defer.reject(err);
+      return defer.resolve(result);
+    });
 
     return defer.promise;
   },
 
-  createPage: function(pageParams, pageData) {
+  createPage: function(pageParams) {
     const Page = mongoose.model('Page');
-    const defer = Q.defer();
+    const page = new Page(pageParams);
 
-    storage.createPage(pageParams.key, pageData)
-      .then(function() {
-        const page = new Page(pageParams);
-        page.save(function(err) {
-          const errors = hasErrors(err);
-          if(errors) return defer.reject(errors);
-          defer.resolve(page);
-        });
-      })
-      .catch(defer.reject)
+    const defer = Q.defer();
+    page.save(function(err) {
+      const errors = hasErrors(err);
+      if(errors) return defer.reject(errors);
+      defer.resolve(page);
+    });
 
     return defer.promise;
   }

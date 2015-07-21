@@ -14,8 +14,6 @@ block content
     thead
       tr
         th
-          | 
-        th
           | Title
         th
           | Start
@@ -28,12 +26,6 @@ block content
     tbody
       each page in pages
         tr
-          td
-            a(href="/admin/pages/#{page._id}")
-              if page.image_preview
-                img(src="#{page.image_preview}", width="35", height="35")
-              else 
-                i.fa.fa-picture-o.fa-3x
           td
             a(href="/admin/pages/#{page._id}")
               | #{page.title}
@@ -57,8 +49,6 @@ block content
 
     tfoot
       tr
-        th
-          | 
         th
           | Title
         th

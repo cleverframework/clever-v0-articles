@@ -18,6 +18,9 @@ block content
       label(for="inputTitle") Title
       input#inputTitle.form-control(type="text", name="title", value="", placeholder="Max 32 characters", maxlength="32")
     .form-group
+      label(for="inputSlug") Slug
+      input#inputSlug.form-control(type="text", name="slug", value="", placeholder="Slug (max 32 characters)", maxlength="32")
+    .form-group
       label(for="inputStandfirst") Standfirst 
       input#inputStandfirst.form-control(type="text", name="standfirst", value="", placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
     .form-group
@@ -66,7 +69,7 @@ block content
     br
     div#createPageError(class="alert alert-danger hidden", role="alert")
       b
-        |	Ops! 
+        |	Oops! 
       span.message
         | No Errors
 
