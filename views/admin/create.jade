@@ -1,7 +1,8 @@
 extends ../../../system/views/admin/layout/admin
 
 block appendcss
-  link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/base/all.css')
+  link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/jquery-ui.min.css')
+  link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/theme.css')
   link(rel='stylesheet', href='/public/system/admin/index.css')
   link(rel='stylesheet', href='/public/pages/admin/index.css')
 
@@ -15,30 +16,50 @@ block content
     h2 Headers
     .form-group
       label(for="inputTitle") Title
-      input#inputTitle.form-control(type="text", name="title", value="", placeholder="Title (max 32 characters)", maxlength="32")
+      input#inputTitle.form-control(type="text", name="title", value="", placeholder="Max 32 characters", maxlength="32")
     .form-group
-      label(for="inputComment") Comment 
-      input#inputComment.form-control(type="text", name="comment", value="", placeholder="Comment (max 64 characters)", maxlength="64")
+      label(for="inputStandfirst") Standfirst 
+      input#inputStandfirst.form-control(type="text", name="standfirst", value="", placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    .form-group
+      label(for="inputStart") Start 
+      input#inputStart.form-control(type="text", name="start", value="", placeholder="dd/mm/yyyy hh:mm:ss")
+    .form-group
+      label(for="inputEnd") End 
+      input#inputEnd.form-control(type="text", name="end", value="", placeholder="dd/mm/yyyy hh:mm:ss")
       
     div.row.placeholders
     
     h2 Blocks
     #pageBlocks
     .btn-group
-      button.btn.btn-info.dropdown-toggle(type="button", data-toggle="dropdown", aria-expanded="false")
+      button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
         | Add 
         span.caret
       ul.dropdown-menu(role="menu")
         li
-          a#addTextBlock(href="#add-text") Text
+          a#addTextBlock(href="#add-text") 
+            i.fa.fa-paragraph &nbsp;
+            | Text
         li
-          a#addImageBlock(href="#add-image") Image
+          a#addQuoteBlock(href="#add-quote")
+            i.fa.fa-quote-left &nbsp;
+            | Quote
         li
-          a(href="#add-gallery") Gallery
+          a#addImageBlock(href="#add-image")
+            i.fa.fa-picture-o &nbsp;
+            | Image
+        li
+          a#addGalleryBlock(href="#add-gallery")
+            i.fa.fa-instagram &nbsp;
+            | Gallery
+        li
+          a#addVideoBlock(href="#add-video")
+            i.fa.fa-youtube &nbsp;
+            | Video
       
     div.row.placeholders
       
-    input(type="hidden", name="_csrf", value="#{csrfToken}")
+    input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
     a.btn.btn-default(href="/admin/pages", style="margin-right: 5px;") Cancel
     button#createPageBtn.btn.btn-success(type="submit") Create
     br
@@ -52,6 +73,9 @@ block content
 block appendjs
   script.
     window.urlreload = false;
+    window.csrf = '#{csrfToken}';
+    window.imageList = JSON.parse('!{imageList}');
+    window.galleryList = JSON.parse('!{galleryList}');
     $(function() {
       $pageBlocks = $('#pageBlocks');
       $pageBlocks.sortable();

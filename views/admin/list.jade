@@ -18,7 +18,9 @@ block content
         th
           | Title
         th
-          | Comment
+          | Start
+        th
+          | End
         th
           | Modified
         th
@@ -36,7 +38,9 @@ block content
             a(href="/admin/pages/#{page._id}")
               | #{page.title}
           td
-            | #{page.comment}
+            | #{page.start}
+          td
+            | #{page.end}
           td
             | #{page.modified}  
           td
@@ -58,7 +62,9 @@ block content
         th
           | Title
         th
-          | Comment
+          | Start
+        th
+          | End
         th
           | Modified
         th
@@ -90,4 +96,6 @@ block appendjs
   script.
     window.urlreload = false;
     window.csrf = '#{csrfToken}';
+    window.images = [];
+    window.galleries = [];
   script(src="/public/pages/admin/index.js")

@@ -14,12 +14,24 @@ export default (app) => {
     callListener.call(this, e, 'addTextBlock');
   });
 
+  $('#addQuoteBlock').click(function(e) {
+    callListener.call(this, e, 'addQuoteBlock');
+  });
+
   $('#addImageBlock').click(function(e) {
     callListener.call(this, e, 'addImageBlock');
   });
 
-  $('#editGalleryBlock').click(function(e) {
-    callListener.call(this, e, 'editGalleryBlock');
+  $('#addGalleryBlock').click(function(e) {
+    callListener.call(this, e, 'addGalleryBlock');
+  });
+
+  $('#addVideoBlock').click(function(e) {
+    callListener.call(this, e, 'addVideoBlock');
+  });
+
+  $('#createPage').submit(function(e) {
+    callListener.call(this, e, 'createPage');
   });
 
   $('#editPage').submit(function(e) {

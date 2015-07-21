@@ -10,12 +10,12 @@ class App extends events.EventEmitter {
 // controllers
 import listener from './controllers/listeners';
 import register from './controllers/register';
-import jqueryAutoselect from 'jquery-autoselect';
+// import jqueryAutoselect from 'jquery-autoselect';
 
 let app = window.app = new App();
 
 // jQuery plugins
-jqueryAutoselect($);
+// jqueryAutoselect($);
 
 // config
 config(app);

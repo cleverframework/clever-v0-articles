@@ -46,7 +46,7 @@ const PageSchema = new Schema({
     default: 'Untitled',
     get: escapeProperty
   },
-  comment: {
+  standfirst: {
     type: String,
     default: '',
     get: escapeProperty

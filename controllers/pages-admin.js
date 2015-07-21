@@ -5,6 +5,7 @@ const config = require('clever-core').loadConfig();
 const mongoose = require('mongoose');
 const Page = mongoose.model('Page');
 const File = mongoose.model('File');
+const Gallery = mongoose.model('Gallery');
 const async = require('async');
 const util = require('../util');
 
@@ -83,11 +84,25 @@ exports.showPage = function(PagesPackage, req, res, next) {
 };
 
 exports.createPage = function(PagesPackage, req, res, next) {
-  res.send(PagesPackage.render('admin/create', {
-    packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
-    user: req.user,
-    csrfToken: req.csrfToken()
-  }));
+
+  function render(imageList, galleryList) {
+    res.send(PagesPackage.render('admin/create', {
+      packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
+      imageList: JSON.stringify(imageList),
+      galleryList: JSON.stringify(galleryList),
+      user: req.user,
+      csrfToken: req.csrfToken()
+    }));
+  }
+
+  File.getImageList()
+    .then(function(imageList) {
+      Gallery.getGalleryList()
+        .then(render.bind(null, imageList))
+        .catch(util.passNext.bind(null, next));
+    })
+    .catch(util.passNext.bind(null, next));
+
 };
 
 exports.editPage = function(PagesPackage, req, res, next) {
