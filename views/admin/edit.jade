@@ -1,0 +1,146 @@
+extends ../../../system/views/admin/layout/admin
+
+block appendcss
+  link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/jquery-ui.min.css')
+  link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/theme.css')
+  link(rel='stylesheet', href='/public/system/admin/index.css')
+  link(rel='stylesheet', href='/public/pages/admin/index.css')
+
+block content
+  h1.page-header
+    | Pages: 
+    span(style="color: #666") #{pageToEdit.title} [Details]
+    div.row.placeholders
+  form#createPage.col-sm-8(method="POST", action="/api/pages", autocomplete="off")
+  
+    h2 Headers
+    .form-group
+      label(for="inputTitle") Title
+      input#inputTitle.form-control(type="text", name="title", value="#{pageToEdit.title}", placeholder="", maxlength="32")
+    .form-group
+      label(for="inputSlug") Slug
+      input#inputSlug.form-control(type="text", name="slug", value="#{pageToEdit.title}", placeholder="", maxlength="32")
+    .form-group
+      label(for="inputStandfirst") Standfirst 
+      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToEdit.title}", placeholder="")
+    .form-group
+      label(for="inputStart") Start 
+      input#inputStart.form-control(type="text", name="start", value="#{pageToEdit.start}", placeholder="")
+    .form-group
+      label(for="inputEnd") End 
+      input#inputEnd.form-control(type="text", name="end", value="#{pageToEdit.end || 'Never'}", placeholder="")
+      
+    div.row.placeholders
+    
+    h2 Blocks
+    #pageBlocks
+    
+      each block, index in pageToEdit.blocks 
+        
+        if block.type == 'text'
+          .form-group(id='formGroup#{index}', style='display: block;')
+            label(style='width: 100%;')
+              span.pull-left
+                b TEXT
+              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+              i.fa.fa-sort.pull-right
+            textarea.form-control.page-blocks(data-type='text', name='texts[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
+            
+        else if block.type == 'quote'    
+          .form-group(id='formGroup#{index}', style='display: block;')
+            label(style='width: 100%;')
+              span.pull-left
+                b QUOTE
+            textarea.form-control.page-blocks(data-type='quote', name='quotes[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
+        
+        else if block.type == 'image'     
+          .form-group(id='formGroup#{index}', style='display: block;')
+            label(style='width: 100%;')
+              span.pull-left
+                b IMAGE
+              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+              i.fa.fa-sort.pull-right
+            select.form-control.page-blocks(data-type='image', name='images[]', placeholder='Select an image from your library')
+              option(value='-1')
+              each imgEl in JSON.parse(imageList)  
+                if imgEl._id == block.value
+                  option(value='#{imgEl._id}', selected) #{imgEl.title}
+                else 
+                  option(value='#{imgEl._id}') #{imgEl.title}
+        
+        else if block.type == 'gallery' 
+          .form-group(id='formGroup#{index}', style='display: block;')
+            label(style='width: 100%;')
+              span.pull-left
+                b GALLERY
+              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+              i.fa.fa-sort.pull-right
+            select.form-control.page-blocks(data-type='gallery', name='images[]', placeholder='Select a gallery from your library')
+              option(value='-1')
+              each gEl in JSON.parse(galleryList)  
+                if gEl._id == block.value
+                  option(value='#{gEl._id}', selected) #{gEl.title}
+                else 
+                  option(value='#{gEl._id}') #{gEl.title}
+
+        else if block.type == 'video' 
+          .form-group(id='formGroup#{index}', style='display: block;')
+            label(style='width: 100%;')
+              span.pull-left
+                b VIDEO
+              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+              i.fa.fa-sort.pull-right
+            input.form-control.page-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY')
+      
+    .btn-group
+      button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
+        | Add 
+        span.caret
+      ul.dropdown-menu(role="menu")
+        li
+          a#addTextBlock(href="#add-text") 
+            i.fa.fa-paragraph &nbsp;
+            | Text
+        li
+          a#addQuoteBlock(href="#add-quote")
+            i.fa.fa-quote-left &nbsp;
+            | Quote
+        li
+          a#addImageBlock(href="#add-image")
+            i.fa.fa-picture-o &nbsp;
+            | Image
+        li
+          a#addGalleryBlock(href="#add-gallery")
+            i.fa.fa-instagram &nbsp;
+            | Gallery
+        li
+          a#addVideoBlock(href="#add-video")
+            i.fa.fa-youtube &nbsp;
+            | Video
+          
+    div.row.placeholders
+      
+    input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
+    a.btn.btn-default(href="/admin/pages", style="margin-right: 5px;") Cancel
+    button#createPageBtn.btn.btn-success(type="submit") Save
+    br
+    br
+    div#createPageError(class="alert alert-danger hidden", role="alert")
+      b
+        |	Oops! 
+      span.message
+        | No Errors
+
+block appendjs
+  script.
+    window.urlreload = false;
+    window.csrf = '#{csrfToken}';
+    window.imageList = JSON.parse('!{imageList}');
+    window.galleryList = JSON.parse('!{galleryList}');
+    $(function() {
+      $pageBlocks = $('#pageBlocks');
+      $pageBlocks.sortable();
+      $pageBlocks.disableSelection();
+    });
+  script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
+  script(src="/public/pages/admin/index.js")

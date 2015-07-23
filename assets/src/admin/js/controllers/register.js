@@ -49,5 +49,10 @@ export default (app) => {
     callListener.call(this, e, 'deletePage');
   });
 
+  $('.fa-minus').click(function(e) {
+    if(!confirm('Are you sure to want delete this block?')) return false;
+    $(`#formGroup${$(this).data('target')}`).remove();
+  });
+
   return app;
 }

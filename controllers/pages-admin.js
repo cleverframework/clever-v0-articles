@@ -50,7 +50,57 @@ exports.showPages = function(PagesPackage, req, res, next) {
 };
 
 exports.showPage = function(PagesPackage, req, res, next) {
+  function render(imageList, galleryList, pageToShow) {
+    res.send(PagesPackage.render('admin/details', {
+      packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
+      pageToShow: pageToShow,
+      imageList: JSON.stringify(imageList),
+      galleryList: JSON.stringify(galleryList),
+      user: req.user,
+      csrfToken: req.csrfToken()
+    }));
+  }
 
+  File.getImageList()
+    .then(function(imageList) {
+      Gallery.getGalleryList()
+        .then(function(galleryList) {
+          Page.getPage(req.params.id)
+            .then(render.bind(null, imageList, galleryList))
+            .catch(util.passNext.bind(null, next));
+        })
+        .catch(util.passNext.bind(null, next));
+    })
+    .catch(util.passNext.bind(null, next));
+};
+
+exports.editPage = function(PagesPackage, req, res, next) {
+  function render(imageList, galleryList, pageToEdit) {
+    try {
+      res.send(PagesPackage.render('admin/edit', {
+        packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
+        pageToEdit: pageToEdit,
+        imageList: JSON.stringify(imageList),
+        galleryList: JSON.stringify(galleryList),
+        user: req.user,
+        csrfToken: req.csrfToken()
+      }));
+    } catch (e) {
+      util.passNext(next, e)
+    }
+  }
+
+  File.getImageList()
+    .then(function(imageList) {
+      Gallery.getGalleryList()
+        .then(function(galleryList) {
+          Page.getPage(req.params.id)
+            .then(render.bind(null, imageList, galleryList))
+            .catch(util.passNext.bind(null, next));
+        })
+        .catch(util.passNext.bind(null, next));
+    })
+    .catch(util.passNext.bind(null, next));
 };
 
 exports.createPage = function(PagesPackage, req, res, next) {
@@ -72,9 +122,5 @@ exports.createPage = function(PagesPackage, req, res, next) {
         .catch(util.passNext.bind(null, next));
     })
     .catch(util.passNext.bind(null, next));
-
-};
-
-exports.editPage = function(PagesPackage, req, res, next) {
 
 };

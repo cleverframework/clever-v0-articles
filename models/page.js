@@ -8,6 +8,7 @@ const Schema  = mongoose.Schema;
 const _ = require('lodash');
 const Q = require('q');
 const async = require('async');
+const moment = require('moment');
 
 // Mongoose Error Handling
 function hasErrors(err) {
@@ -93,11 +94,46 @@ const PageSchema = new Schema({
 });
 
 // Virtuals
+PageSchema.virtual('created_ago').set(function(url) {
+  throw new Error('Page::created_ago cannot be set.');
+}).get(function() {
+  if(this.created === null) return null;
+  return moment(this.created).fromNow();
+});
+
 PageSchema.virtual('modified_ago').set(function(url) {
   throw new Error('Page::modified_ago cannot be set.');
 }).get(function() {
-  if(this.modified === null) return null;
+    if(!this.modified || this.modified === null) return null;
   return moment(this.modified).fromNow();
+});
+
+PageSchema.virtual('created_format').set(function(url) {
+  throw new Error('Page::created_format cannot be set.');
+}).get(function() {
+  if(this.created === null) return null;
+  return moment(this.created).format('MM/DD/YYYY hh:mm:ss');
+});
+
+PageSchema.virtual('modified_format').set(function(url) {
+  throw new Error('Page::modified_format cannot be set.');
+}).get(function() {
+  if(!this.modified || this.modified === null) return null;
+  return moment(this.modified).format('MM/DD/YYYY hh:mm:ss');
+});
+
+PageSchema.virtual('start_format').set(function(url) {
+  throw new Error('Page::start_format cannot be set.');
+}).get(function() {
+  if(this.start === null) return null;
+  return moment(this.start).format('MM/DD/YYYY hh:mm:ss');
+});
+
+PageSchema.virtual('end_format').set(function(url) {
+  throw new Error('Page::end_format cannot be set.');
+}).get(function() {
+  if(!this.end || this.end === null) return null;
+  return moment(this.end).format('MM/DD/YYYY hh:mm:ss');
 });
 
 // Static Methods

@@ -30,9 +30,9 @@ block content
             a(href="/admin/pages/#{page._id}")
               | #{page.title}
           td
-            | #{page.start}
+            | #{page.start_format}
           td
-            | #{page.end || 'Never'}
+            | #{page.end_format || 'Never'}
           td
             | #{page.modified_ago || 'Never'}  
           td
