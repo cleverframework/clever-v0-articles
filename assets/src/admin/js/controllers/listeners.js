@@ -8,7 +8,7 @@ export default (app) => {
       dataType : 'JSON',
       success:function(data, textStatus, jqXHR) {
         console.log(data)
-        // location.href = `${options.urlCallback}/${data._id}`;
+        location.href = `${options.urlCallback}/${data._id}`;
       },
       error: function(jqXHR, textStatus, errorThrown) {
         // Show the errors to the page
@@ -339,15 +339,34 @@ export default (app) => {
 
     const $editPageError = $('#editPageError');
     const $editPageBtn = $('#editPageBtn');
+
+    const putData = {
+      title: $('#inputTitle').val(),
+      slug: $('#inputSlug').val(),
+      standfirst: $('#inputStandfirst').val(),
+      start: $('#inputStart').val().trim(' ') === '' ? undefined : $('#inputStart').val(),
+      end: $('#inputEnd').val().trim(' ') === '' ? undefined : $('#inputEnd').val(),
+      blocks: [],
+      _csrf: $('#inputCsrf').val()
+    };
+
+    $('.page-blocks').each(function(index) {
+      const block = {};
+      block.type = $(this).data('type');
+      block.value = $(this).val();
+      block.order = index;
+      putData.blocks.push(block);
+    });
+
     const options = {
       formURL: $(form).attr('action'),
       method: $(form).attr('method'),
-      postData: $(form).serialize(),
+      postData: putData,
       urlCallback: '/admin/pages',
       $error: $editPageError,
       $errorMessage: $('#editPageError .message'),
       $btn: $editPageBtn
-    }
+    };
 
     // Clear the error message div
     $editPageError.addClass('hidden');
@@ -377,7 +396,7 @@ export default (app) => {
     });
 
     request.done(function(msg) {
-      if(window.urlreload === -1) {
+      if(window.urlreload === false) {
         return location.reload();
       }
       location.href = window.urlreload;

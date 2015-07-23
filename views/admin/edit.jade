@@ -11,7 +11,7 @@ block content
     | Pages: 
     span(style="color: #666") #{pageToEdit.title} [Details]
     div.row.placeholders
-  form#createPage.col-sm-8(method="POST", action="/api/pages", autocomplete="off")
+  form#editPage.col-sm-8(method="PUT", action="/api/pages/#{pageToEdit._id}", autocomplete="off")
   
     h2 Headers
     .form-group
@@ -19,16 +19,16 @@ block content
       input#inputTitle.form-control(type="text", name="title", value="#{pageToEdit.title}", placeholder="", maxlength="32")
     .form-group
       label(for="inputSlug") Slug
-      input#inputSlug.form-control(type="text", name="slug", value="#{pageToEdit.title}", placeholder="", maxlength="32")
+      input#inputSlug.form-control(type="text", name="slug", value="#{pageToEdit.slug}", placeholder="", maxlength="32")
     .form-group
       label(for="inputStandfirst") Standfirst 
-      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToEdit.title}", placeholder="")
+      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToEdit.standfirst}", placeholder="")
     .form-group
       label(for="inputStart") Start 
-      input#inputStart.form-control(type="text", name="start", value="#{pageToEdit.start}", placeholder="")
+      input#inputStart.form-control(type="text", name="start", value="#{pageToEdit.start_format}", placeholder="dd/mm/yyyy hh:mm:ss")
     .form-group
       label(for="inputEnd") End 
-      input#inputEnd.form-control(type="text", name="end", value="#{pageToEdit.end || 'Never'}", placeholder="")
+      input#inputEnd.form-control(type="text", name="end", value="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
       
     div.row.placeholders
     
@@ -122,10 +122,10 @@ block content
       
     input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
     a.btn.btn-default(href="/admin/pages", style="margin-right: 5px;") Cancel
-    button#createPageBtn.btn.btn-success(type="submit") Save
+    button#editPageBtn.btn.btn-success(type="submit") Save
     br
     br
-    div#createPageError(class="alert alert-danger hidden", role="alert")
+    div#editPageError(class="alert alert-danger hidden", role="alert")
       b
         |	Oops! 
       span.message
@@ -133,7 +133,7 @@ block content
 
 block appendjs
   script.
-    window.urlreload = false;
+    window.urlreload = '/admin/pages';
     window.csrf = '#{csrfToken}';
     window.imageList = JSON.parse('!{imageList}');
     window.galleryList = JSON.parse('!{galleryList}');

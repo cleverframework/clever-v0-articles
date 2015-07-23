@@ -40,7 +40,8 @@ function validateUniqueSlug(value, callback) {
   const Page = mongoose.model('Page');
   Page.find({
     $and: [{
-      slug: value
+      slug: value,
+      deleted: false
     }, {
       _id: {
         $ne: this._id
@@ -66,7 +67,6 @@ const PageSchema = new Schema({
   slug: {
     type: String,
     required: true,
-    unique: true,
     // TODO: match valid slug chars
     validate: [validateUniqueSlug, 'Slug is already in-use']
   },
@@ -82,7 +82,10 @@ const PageSchema = new Schema({
   end: {
     type: Date
   },
-  blocks: {},
+  blocks: {
+    type: Object,
+    default: {}
+  },
   created: {
     type: Date,
     default: Date.now
@@ -90,6 +93,10 @@ const PageSchema = new Schema({
   modified: {
     type: Date,
     default: null
+  },
+  deleted: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -166,7 +173,7 @@ PageSchema.statics = {
     const Page = mongoose.model('Page');
     const options = skip && limit ? {skip: skip, limit: limit} : {};
     const defer = Q.defer();
-    Page.find({}, {}, options, function(err, pages) {
+    Page.find({deleted: false}, {}, options, function(err, pages) {
       if (err) return defer.reject(err);
       return defer.resolve(pages);
     }).sort({ _id: -1 });
@@ -184,7 +191,7 @@ PageSchema.statics = {
     if(!id) throw new Error('Page.getPageById: id parameter is mandatory');
     const Page = mongoose.model('Page');
     const defer = Q.defer();
-    Page.findOne({_id: id}, function(err, page) {
+    Page.findOne({_id: id, deleted: false}, function(err, page) {
       if (err) return defer.reject(err);
       return defer.resolve(page);
     });
@@ -213,6 +220,8 @@ PageSchema.statics = {
         page[key] = pageParams[key];
       });
 
+      page.modified = Date.now();
+
       page.save(function(err) {
         const errors = hasErrors(err);
         if(errors) return defer.reject(errors);
@@ -220,7 +229,7 @@ PageSchema.statics = {
       });
     }
 
-    Page.getPageById(id)
+    Page.getPage(id)
       .then(save)
       .catch(defer.reject);
 
@@ -228,23 +237,24 @@ PageSchema.statics = {
   },
 
   /**
-   * DeletePageById - delete the page matching the id
+   * deletePage - delete logically the page matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
-  deletePageById: function(id) {
+  deletePage: function(id) {
     if(!id) throw new Error('Page.deletePageById: id parameter is mandatory');
-    const Page = mongoose.model('Page');
-    const defer = Q.defer();
-
-    Page.remove({_id: page._id}, function(err, result) {
-      if (err) return defer.reject(err);
-      return defer.resolve(result);
-    });
-
-    return defer.promise;
+    // const Page = mongoose.model('Page');
+    // const defer = Q.defer();
+    //
+    // Page.remove({_id: page._id}, function(err, result) {
+    //   if (err) return defer.reject(err);
+    //   return defer.resolve(result);
+    // });
+    //
+    // return defer.promise;
+    return this.editPage(id, {deleted: true})
   },
 
   createPage: function(pageParams) {

@@ -28,3 +28,29 @@ exports.createPage = function(req, res, next) {
     .then(util.sendObjectAsHttpResponse.bind(null, res, 201))
     .catch(util.sendObjectAsHttpResponse.bind(null, res, 400));
 };
+
+exports.editPage = function(req, res, next) {
+
+  req.assert('title', 'Gallery must have a title of not more than 32 characters').notEmpty().len(1, 32);
+  req.assert('slug', 'Gallery must have a slug of not more than 32 characters').notEmpty().len(1, 32);
+  req.assert('start', 'Start must be a date').optional().isDate();
+  req.assert('end', 'End must be a date').optional().isDate();
+
+  const errors = req.validationErrors();
+  if (errors) {
+    return res.status(400).json(errors);
+  }
+
+  req.body.start = req.body.start ? req.body.start : Date.now();
+  // req.body.end = req.body.end ? new Date(req.body.start).getTime() : undefined;
+
+  Page.editPage(req.params.id, req.body)
+    .then(util.sendObjectAsHttpResponse.bind(null, res, 202))
+    .catch(util.sendObjectAsHttpResponse.bind(null, res, 400));
+};
+
+exports.deletePage = function(req, res, next) {
+  Page.deletePage(req.params.id)
+    .then(util.sendObjectAsHttpResponse.bind(null, res, 202))
+    .catch(util.passNext.bind(null, next));
+};

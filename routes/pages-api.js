@@ -17,6 +17,10 @@ module.exports = function(PagesPackage, app, auth, database) {
 
   router.post('/', auth.requiresAdmin, pagesApiCtrl.createPage);
 
+  router.put('/:id', auth.requiresAdmin, pagesApiCtrl.editPage);
+
+  router.delete('/:id', auth.requiresAdmin, pagesApiCtrl.deletePage);
+
   return new CleverCore.CleverRoute(router, 'api', false);
 
 };

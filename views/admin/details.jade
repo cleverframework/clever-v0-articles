@@ -19,16 +19,16 @@ block content
       input#inputTitle.form-control(type="text", name="title", value="#{pageToShow.title}", placeholder="", maxlength="32", disabled)
     .form-group
       label(for="inputSlug") Slug
-      input#inputSlug.form-control(type="text", name="slug", value="#{pageToShow.title}", placeholder="", maxlength="32", disabled)
+      input#inputSlug.form-control(type="text", name="slug", value="#{pageToShow.slug}", placeholder="", maxlength="32", disabled)
     .form-group
       label(for="inputStandfirst") Standfirst 
-      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToShow.title}", placeholder="", disabled)
+      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToShow.standfirst}", placeholder="", disabled)
     .form-group
       label(for="inputStart") Start 
-      input#inputStart.form-control(type="text", name="start", value="#{pageToShow.start}", placeholder="", disabled)
+      input#inputStart.form-control(type="text", name="start", value="#{pageToShow.start_format}", placeholder="", disabled)
     .form-group
       label(for="inputEnd") End 
-      input#inputEnd.form-control(type="text", name="end", value="#{pageToShow.end || 'Never'}", placeholder="", disabled)
+      input#inputEnd.form-control(type="text", name="end", value="#{pageToShow.end_format || 'Never'}", placeholder="", disabled)
     .form-group
       label(for="inputCreated") Created
       input#inputCreated.form-control(type="text", name="created", value="#{pageToShow.created_format} (#{pageToShow.created_ago})", placeholder="Created", disabled)  
@@ -111,11 +111,11 @@ block content
           a(href="/admin/pages/#{pageToShow._id}/edit") Edit
         | 
         li
-          a.deleteFile(href="#", data-id="#{pageToShow._id}") Delete
+          a.deletePage(href="#", data-id="#{pageToShow._id}") Delete
 
 block appendjs
   script.
-    window.urlreload = false;
+    window.urlreload = '/admin/pages';
     window.csrf = '#{csrfToken}';
     window.imageList = JSON.parse('!{imageList}');
     window.galleryList = JSON.parse('!{galleryList}');
