@@ -5,11 +5,22 @@
   "author": {
     "name": "Jacopo Daeli <jacopo.daeli@gmail.com>"
   },
+  "scripts": {
+    "build": "npm run build-js",
+    "develop": "npm run watch-js",
+    "watch-js": "watchify assets/src/admin/js/index.js -t babelify -o assets/dist/admin/index.js -v",
+    "build-js": "browserify assets/src/admin/js/index.js -t babelify -o assets/dist/admin/index.js",
+    "watch-css": "",
+    "build-css": ""
+  },
   "clever": "0.0.x",
   "visible": true,
   "dependencies": {
+    "babelify": "^6.1.3",
     "jquery-autoselect": "0.0.2",
-    "moment": "^2.10.3"
+    "moment": "^2.10.3",
+    "react": "^0.13.3",
+    "watchify": "^3.3.0"
   },
   "devDependencies": {},
   "license": "MIT"
