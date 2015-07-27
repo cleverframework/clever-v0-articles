@@ -7,129 +7,140 @@ block appendcss
   link(rel='stylesheet', href='/public/pages/admin/index.css')
 
 block content
-  h1.page-header
-    | Pages: 
-    span(style="color: #666") #{pageToEdit.title} [Details]
-    div.row.placeholders
-  form#editPage.col-sm-8(method="PUT", action="/api/pages/#{pageToEdit._id}", autocomplete="off")
   
-    h2 Headers
-    .form-group
-      label(for="inputTitle") Title
-      input#inputTitle.form-control(type="text", name="title", value="#{pageToEdit.title}", placeholder="", maxlength="32")
-    .form-group
-      label(for="inputSlug") Slug
-      input#inputSlug.form-control(type="text", name="slug", value="#{pageToEdit.slug}", placeholder="", maxlength="32")
-    .form-group
-      label(for="inputStandfirst") Standfirst 
-      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToEdit.standfirst}", placeholder="")
-    .form-group
-      label(for="inputStart") Start 
-      input#inputStart.form-control(type="text", name="start", value="#{pageToEdit.start_format}", placeholder="dd/mm/yyyy hh:mm:ss")
-    .form-group
-      label(for="inputEnd") End 
-      input#inputEnd.form-control(type="text", name="end", value="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
+  form#editPage.row(method="PUT", action="/api/pages/#{pageToEdit._id}", autocomplete="off")
+    .col-sm-9.col-main
+  
+      h1.page-header
+        | Pages: 
+        span(style="color: #666") #{pageToEdit.title} [Details]
+        div.row.placeholders
       
-    div.row.placeholders
-    
-    h2 Blocks
-    #pageBlocks
-    
-      each block, index in pageToEdit.blocks 
-        
-        if block.type == 'text'
-          .form-group(id='formGroup#{index}', style='display: block;')
-            label(style='width: 100%;')
-              span.pull-left
-                b TEXT
-              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
-              i.fa.fa-sort.pull-right
-            textarea.form-control.page-blocks(data-type='text', name='texts[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
-            
-        else if block.type == 'quote'    
-          .form-group(id='formGroup#{index}', style='display: block;')
-            label(style='width: 100%;')
-              span.pull-left
-                b QUOTE
-            textarea.form-control.page-blocks(data-type='quote', name='quotes[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
-        
-        else if block.type == 'image'     
-          .form-group(id='formGroup#{index}', style='display: block;')
-            label(style='width: 100%;')
-              span.pull-left
-                b IMAGE
-              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
-              i.fa.fa-sort.pull-right
-            select.form-control.page-blocks(data-type='image', name='images[]', placeholder='Select an image from your library')
-              option(value='-1')
-              each imgEl in JSON.parse(imageList)  
-                if imgEl._id == block.value
-                  option(value='#{imgEl._id}', selected) #{imgEl.title}
-                else 
-                  option(value='#{imgEl._id}') #{imgEl.title}
-        
-        else if block.type == 'gallery' 
-          .form-group(id='formGroup#{index}', style='display: block;')
-            label(style='width: 100%;')
-              span.pull-left
-                b GALLERY
-              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
-              i.fa.fa-sort.pull-right
-            select.form-control.page-blocks(data-type='gallery', name='images[]', placeholder='Select a gallery from your library')
-              option(value='-1')
-              each gEl in JSON.parse(galleryList)  
-                if gEl._id == block.value
-                  option(value='#{gEl._id}', selected) #{gEl.title}
-                else 
-                  option(value='#{gEl._id}') #{gEl.title}
-
-        else if block.type == 'video' 
-          .form-group(id='formGroup#{index}', style='display: block;')
-            label(style='width: 100%;')
-              span.pull-left
-                b VIDEO
-              i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
-              i.fa.fa-sort.pull-right
-            input.form-control.page-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY')
       
-    .btn-group
-      button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
-        | Add 
-        span.caret
-      ul.dropdown-menu(role="menu")
-        li
-          a#addTextBlock(href="#add-text") 
-            i.fa.fa-paragraph &nbsp;
-            | Text
-        li
-          a#addQuoteBlock(href="#add-quote")
-            i.fa.fa-quote-left &nbsp;
-            | Quote
-        li
-          a#addImageBlock(href="#add-image")
-            i.fa.fa-picture-o &nbsp;
-            | Image
-        li
-          a#addGalleryBlock(href="#add-gallery")
-            i.fa.fa-instagram &nbsp;
-            | Gallery
-        li
-          a#addVideoBlock(href="#add-video")
-            i.fa.fa-youtube &nbsp;
-            | Video
+        h2 Headers
+        .form-group
+          label(for="inputTitle") Title
+          input#inputTitle.form-control(type="text", name="title", value="#{pageToEdit.title}", placeholder="", maxlength="32")
+        .form-group
+          label(for="inputSlug") Slug
+          input#inputSlug.form-control(type="text", name="slug", value="#{pageToEdit.slug}", placeholder="", maxlength="32")
+        .form-group
+          label(for="inputStandfirst") Standfirst 
+          input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToEdit.standfirst}", placeholder="")
+        .form-group
+          label(for="inputStart") Start 
+          input#inputStart.form-control(type="text", name="start", value="#{pageToEdit.start_format}", placeholder="dd/mm/yyyy hh:mm:ss")
+        .form-group
+          label(for="inputEnd") End 
+          input#inputEnd.form-control(type="text", name="end", value="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
           
-    div.row.placeholders
+        div.row.placeholders
+        
+        h2 Blocks
+        #pageBlocks
+        
+          each block, index in pageToEdit.blocks 
+            
+            if block.type == 'text'
+              .form-group(id='formGroup#{index}', style='display: block;')
+                label(style='width: 100%;')
+                  span.pull-left
+                    b TEXT
+                  i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+                  i.fa.fa-sort.pull-right
+                textarea.form-control.page-blocks(data-type='text', name='texts[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
+                
+            else if block.type == 'quote'    
+              .form-group(id='formGroup#{index}', style='display: block;')
+                label(style='width: 100%;')
+                  span.pull-left
+                    b QUOTE
+                textarea.form-control.page-blocks(data-type='quote', name='quotes[]', placeholder='Feel free to write soemthing...', rows='5') #{block.value}
+            
+            else if block.type == 'image'     
+              .form-group(id='formGroup#{index}', style='display: block;')
+                label(style='width: 100%;')
+                  span.pull-left
+                    b IMAGE
+                  i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+                  i.fa.fa-sort.pull-right
+                select.form-control.page-blocks(data-type='image', name='images[]', placeholder='Select an image from your library')
+                  option(value='-1')
+                  each imgEl in JSON.parse(imageList)  
+                    if imgEl._id == block.value
+                      option(value='#{imgEl._id}', selected) #{imgEl.title}
+                    else 
+                      option(value='#{imgEl._id}') #{imgEl.title}
+            
+            else if block.type == 'gallery' 
+              .form-group(id='formGroup#{index}', style='display: block;')
+                label(style='width: 100%;')
+                  span.pull-left
+                    b GALLERY
+                  i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+                  i.fa.fa-sort.pull-right
+                select.form-control.page-blocks(data-type='gallery', name='images[]', placeholder='Select a gallery from your library')
+                  option(value='-1')
+                  each gEl in JSON.parse(galleryList)  
+                    if gEl._id == block.value
+                      option(value='#{gEl._id}', selected) #{gEl.title}
+                    else 
+                      option(value='#{gEl._id}') #{gEl.title}
+
+            else if block.type == 'video' 
+              .form-group(id='formGroup#{index}', style='display: block;')
+                label(style='width: 100%;')
+                  span.pull-left
+                    b VIDEO
+                  i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
+                  i.fa.fa-sort.pull-right
+                input.form-control.page-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY')
+          
+        .btn-group
+          button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
+            | Add 
+            span.caret
+          ul.dropdown-menu(role="menu")
+            li
+              a#addTextBlock(href="#add-text") 
+                i.fa.fa-paragraph &nbsp;
+                | Text
+            li
+              a#addQuoteBlock(href="#add-quote")
+                i.fa.fa-quote-left &nbsp;
+                | Quote
+            li
+              a#addImageBlock(href="#add-image")
+                i.fa.fa-picture-o &nbsp;
+                | Image
+            li
+              a#addGalleryBlock(href="#add-gallery")
+                i.fa.fa-instagram &nbsp;
+                | Gallery
+            li
+              a#addVideoBlock(href="#add-video")
+                i.fa.fa-youtube &nbsp;
+                | Video
+              
+        div.row.placeholders
+          
+        input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
+        
+            
+    .col-sm-3
+      button#editPageBtn.btn.btn-lg.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
       
-    input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
-    a.btn.btn-default(href="/admin/pages", style="margin-right: 5px;") Cancel
-    button#editPageBtn.btn.btn-success(type="submit") Save
-    br
-    br
-    div#editPageError(class="alert alert-danger hidden", role="alert")
-      b
-        |	Oops! 
-      span.message
-        | No Errors
+      .btn-group(style="margin-bottom: 15px; width:100%")
+        button.btn.btn-default(type="button", style="display:inline-block;width:50%") Hidden
+        button.btn.btn-default(type="button", style="display:inline-block;width:50%") Publish
+      
+      div
+        a.text-danger(href="/admin/pages") Cancel
+      div#editPageError(class="alert alert-danger hidden", role="alert")
+        b
+          |	Oops! 
+        span.message
+          | No Errors
 
 block appendjs
   script.
