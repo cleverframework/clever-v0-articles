@@ -20,6 +20,7 @@ exports.showPages = function(PagesPackage, req, res, next) {
     try {
       res.send(PagesPackage.render('admin/list', {
         packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
+        packageName: PagesPackage.name,
         user: req.user,
         pages: pages,
         nPages: nPages,
@@ -80,6 +81,7 @@ exports.editPage = function(PagesPackage, req, res, next) {
       res.send(PagesPackage.render('admin/edit', {
         packages: PagesPackage.getCleverCore().getInstance().exportablePkgList,
         pageToEdit: pageToEdit,
+        packageName: PagesPackage.name,
         imageList: JSON.stringify(imageList),
         galleryList: JSON.stringify(galleryList),
         user: req.user,

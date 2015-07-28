@@ -15,6 +15,8 @@ let pagesApiCtrl = require('../controllers/pages-api');
 // Exports
 module.exports = function(PagesPackage, app, auth, database) {
 
+  // router.get('/', auth.requiresAdmin, pagesApiCtrl.getPages);
+
   router.post('/', auth.requiresAdmin, pagesApiCtrl.createPage);
 
   router.put('/:id', auth.requiresAdmin, pagesApiCtrl.editPage);

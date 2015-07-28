@@ -2,91 +2,54 @@ extends ../../../system/views/admin/layout/admin
 
 block appendcss
   link(rel='stylesheet', href='/public/system/admin/index.css')
+  link(rel='stylesheet', href='/public/pages/admin/index.css')
 
 block content
-    
-  h1.page-header
-    | Pages: 
-    span(style="color: #666") List
-    div.row.placeholders
   
-  table.table.table-hover
-    thead
-      tr
-        th
-          | Title
-        th
-          | Slug
-        th
-          | Start
-        th
-          | End
-        th
-          | Modified
-        th
-          | 
-    tbody
-      each page in pages
-        tr
-          td
-            a(href="/admin/pages/#{page._id}")
-              | #{page.title}
-          td
-            a(href="/admin/pages/#{page._id}")
-              | #{page.slug}
-          td
-            | #{page.start_format}
-          td
-            | #{page.end_format || 'Never'}
-          td
-            | #{page.modified_ago || 'Never'}  
-          td
-            .btn-group
-                button.btn.btn-info.dropdown-toggle(type="button", data-toggle="dropdown", aria-expanded="false")
-                  | Modify 
-                  span.caret
-                |   
-                ul.dropdown-menu(role="menu")
-                  li
-                    a(href="/admin/pages/#{page._id}/edit") Edit
-                  li
-                    a.deletePage(href="#", data-id="#{page._id}") Delete
+  .col-main
+    h1.page-header.capitalize #{packageName}
 
-    tfoot
-      tr
-        th
-          | Title
-        th
-          | Slug
-        th
-          | Start
-        th
-          | End
-        th
-          | Modified
-        th
-          | 
+    each page in pages
+      .panel.panel-default
+        .panel-body
           
-  a(href="/admin/pages/create").btn.btn-primary Create
-  
-  - var nPages = Math.ceil(nPages / 10);
-  - var i = 0;
-  
-  if nPages > 0
-    nav.pull-right
-      ul.pagination
-        li(class=(activePage == 0) ? 'disabled' : '')
-          a(href="/admin/pages?page=#{activePage-1}", aria-label="Previous")
-            span(aria-hidden="true") &laquo;
+          //- span
+          //-   | #{page.start_format}
+          //- span
+          //-   | #{page.end_format || 'Never'}
+          .row
+            .col-sm-8
+              h2.h4(style="margin-top: 0"): a(href="/admin/pages/#{page._id}/edit") !{page.title}
+              span Last modified: #{page.modified_ago || 'Never'}  
+            .col-sm-4
+              .btn-group.pull-right
+                button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+                  | Quick Action 
+                  span.caret
+                ul.dropdown-menu
+                  li: a(href="#", data-id="#{page._id}") Publish
+                  li: a.deletePage(href="#", data-id="#{page._id}") Delete
             
-        while i < nPages   
-          li(class=(i == activePage) ? 'active' : '')
-            a(href="/admin/pages?page=#{i}")
-              | #{++i} 
-                
-        li(class=(activePage < nPages-1) ? '' : 'disabled')
-          a(href="/admin/pages?page=#{activePage+1}", aria-label="Next")
-            span(aria-hidden="true") &raquo;        
+    a(href="/admin/pages/create").btn.btn-primary Create
+    
+    - var nPages = Math.ceil(nPages / 10);
+    - var i = 0;
+    
+    if nPages > 0
+      nav.pull-right
+        ul.pagination
+          li(class=(activePage == 0) ? 'disabled' : '')
+            a(href="/admin/pages?page=#{activePage-1}", aria-label="Previous")
+              span(aria-hidden="true") &laquo;
+              
+          while i < nPages   
+            li(class=(i == activePage) ? 'active' : '')
+              a(href="/admin/pages?page=#{i}")
+                | #{++i} 
+                  
+          li(class=(activePage < nPages-1) ? '' : 'disabled')
+            a(href="/admin/pages?page=#{activePage+1}", aria-label="Next")
+              span(aria-hidden="true") &raquo;        
               
 block appendjs
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
