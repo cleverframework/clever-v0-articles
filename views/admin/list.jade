@@ -7,7 +7,16 @@ block appendcss
 block content
   
   .col-main
-    h1.page-header.capitalize #{packageName}
+    .row
+      .col-sm-8
+        h1.page-header.text-capitalize #{packageName}
+      .col-sm-4
+        form
+          .input-group
+            input.text-input(type="search", class="form-control", placeholder="Search")
+            span.input-group-btn
+              button.btn.btn-default(type="submit")
+                span.fa.fa-search(aria-hidden="true")
 
     each page in pages
       .panel.panel-default
@@ -19,12 +28,19 @@ block content
           //-   | #{page.end_format || 'Never'}
           .row
             .col-sm-8
-              h2.h4(style="margin-top: 0"): a(href="/admin/pages/#{page._id}/edit") !{page.title}
-              span Last modified: #{page.modified_ago || 'Never'}  
+              h2.h4(style="margin-top: 0")
+                a(href="/admin/pages/#{page._id}/edit") !{page.title} 
+                if page.published
+                  a(href="#", data-toggle="tooltip", data-placement="top" title="Published"): span.fa.fa-circle.text-success(style="font-size:10px; vertical-align:3px;")
+                else
+                  a(href="#", data-toggle="tooltip", data-placement="top" title="Draft"): span.fa.fa-circle-o.text-warning(style="font-size:10px; vertical-align:3px;")
+              span.small 
+                span(style="color:#666;") Last modified: 
+                | #{page.modified_ago || 'Never'}  
             .col-sm-4
               .btn-group.pull-right
                 button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
-                  | Quick Action 
+                  | Quick Actions 
                   span.caret
                 ul.dropdown-menu
                   li: a(href="#", data-id="#{page._id}") Publish
@@ -52,6 +68,9 @@ block content
               span(aria-hidden="true") &raquo;        
               
 block appendjs
+  script.
+    var bsTooltip = $.fn.tooltip.noConflict();
+    $.fn.bsTooltip = bsTooltip;
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
   script.
     window.urlreload = false;

@@ -17,7 +17,7 @@ block content
         span.message
           | No Errors
   
-      a.capitalize(href='/admin/#{packageName}') #{packageName}
+      a.text-capitalize(href='/admin/#{packageName}') #{packageName}
       h1.page-header!=pageToEdit.title
         
       .form-group
@@ -133,8 +133,8 @@ block content
       button#editPageBtn.btn.btn-lg.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
       
       .btn-group.sidebar-buttons
-        button.btn.btn-default(type="button") Draft
-        button.btn.btn-default(type="button") Published
+        button.btn.btn-default(type="button", class=(!pageToEdit.published) ? 'active' : '') Draft
+        button.btn.btn-default(type="button", class=(pageToEdit.published) ? 'active': '') Published
           
       hr
       .text-right

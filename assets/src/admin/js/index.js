@@ -26,4 +26,8 @@ register(app);
 
 $(document).ready(() => {
   app.emit('appStarted');
+
+  // Bootstrap stuff
+  $('[data-toggle="tooltip"]').bsTooltip()
+
 });
