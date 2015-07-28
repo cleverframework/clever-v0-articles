@@ -90,6 +90,10 @@ const PageSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  published: {
+    type: Boolean,
+    default: false
+  },
   modified: {
     type: Date,
     default: null
