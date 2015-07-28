@@ -55,6 +55,7 @@ exports.showPage = function(ArticlesPackage, req, res, next) {
     res.send(ArticlesPackage.render('admin/details', {
       packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
       pageToShow: pageToShow,
+      packageName: ArticlesPackage.name,
       imageList: JSON.stringify(imageList),
       galleryList: JSON.stringify(galleryList),
       user: req.user,
@@ -110,6 +111,7 @@ exports.createPage = function(ArticlesPackage, req, res, next) {
   function render(imageList, galleryList) {
     res.send(ArticlesPackage.render('admin/create', {
       packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
+      packageName: ArticlesPackage.name,
       imageList: JSON.stringify(imageList),
       galleryList: JSON.stringify(galleryList),
       user: req.user,

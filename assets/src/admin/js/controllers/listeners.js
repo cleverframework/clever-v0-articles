@@ -318,7 +318,7 @@ export default (app) => {
       formURL: $(form).attr('action'),
       method: $(form).attr('method'),
       postData: postData,
-      urlCallback: '/admin/pages',
+      urlCallback: '/admin/articles',
       $error: $createPageError,
       $errorMessage: $('#createPageError .message'),
       $btn: $createPageBtn
@@ -362,7 +362,7 @@ export default (app) => {
       formURL: $(form).attr('action'),
       method: $(form).attr('method'),
       postData: putData,
-      urlCallback: '/admin/pages',
+      urlCallback: '/admin/articles',
       $error: $editPageError,
       $errorMessage: $('#editPageError .message'),
       $btn: $editPageBtn
@@ -388,7 +388,7 @@ export default (app) => {
     console.log($btn.data('id'))
 
     const request = $.ajax({
-      url: `/api/pages/${$btn.data('id')}`,
+      url: `/api/articles/${$btn.data('id')}`,
       beforeSend: function (request) {
         request.setRequestHeader('csrf-token', window.csrf);
       },

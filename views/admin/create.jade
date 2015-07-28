@@ -4,10 +4,10 @@ block appendcss
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/jquery-ui.min.css')
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/theme.css')
   link(rel='stylesheet', href='/public/system/admin/index.css')
-  link(rel='stylesheet', href='/public/pages/admin/index.css')
+  link(rel='stylesheet', href='/public/#{packageName}/admin/index.css')
 
 block content
-  form#createPage.row(method="POST", action="/api/pages", autocomplete="off")
+  form#createPage.row(method="POST", action="/api/#{packageName}", autocomplete="off")
     .col-sm-9.col-main
       h1.page-header New Page 
 
@@ -66,7 +66,7 @@ block content
     
     .col-sm-3
       button#createPageBtn.btn.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
-      a.text-danger(href="/admin/pages") Cancel
+      a.text-danger(href="/admin/#{packageName}") Cancel
       div#createPageError(class="alert alert-danger hidden", role="alert")
         b
           |	Oops! 
@@ -88,4 +88,4 @@ block appendjs
       $pageBlocks.disableSelection();
     });
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
-  script(src="/public/pages/admin/index.js")
+  script(src="/public/#{packageName}/admin/index.js")
