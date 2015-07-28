@@ -1,10 +1,10 @@
 {
-  "name": "pages",
+  "name": "articles",
   "version": "0.0.1",
   "authors": [
     "JacopoDaeli <jacopo.daeli@gmail.com>"
   ],
-  "description": "Pages package",
+  "description": "Articles package",
   "main": "main.js",
   "moduleType": [
     "es6",

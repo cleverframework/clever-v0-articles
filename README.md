@@ -1,2 +1,2 @@
-# clever-pages
-Pages package for CLEVER.
+# clever-articles
+Articles package for CLEVER.

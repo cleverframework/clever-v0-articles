@@ -10,18 +10,18 @@ let CleverCore = require('clever-core');
 let config = CleverCore.loadConfig();
 
 // Load controller
-let pagesApiCtrl = require('../controllers/pages-api');
+let articlesApiCtrl = require('../controllers/articles-api');
 
 // Exports
-module.exports = function(PagesPackage, app, auth, database) {
+module.exports = function(ArticlesPackage, app, auth, database) {
 
   // router.get('/', auth.requiresAdmin, pagesApiCtrl.getPages);
 
-  router.post('/', auth.requiresAdmin, pagesApiCtrl.createPage);
+  router.post('/', auth.requiresAdmin, articlesApiCtrl.createPage);
 
-  router.put('/:id', auth.requiresAdmin, pagesApiCtrl.editPage);
+  router.put('/:id', auth.requiresAdmin, articlesApiCtrl.editPage);
 
-  router.delete('/:id', auth.requiresAdmin, pagesApiCtrl.deletePage);
+  router.delete('/:id', auth.requiresAdmin, articlesApiCtrl.deletePage);
 
   return new CleverCore.CleverRoute(router, 'api', false);
 

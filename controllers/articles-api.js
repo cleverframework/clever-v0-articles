@@ -3,7 +3,7 @@
 // Module dependencies.
 const config = require('clever-core').loadConfig();
 const mongoose = require('mongoose');
-const Page = mongoose.model('Page');
+const Article = mongoose.model('Article');
 const File = mongoose.model('File');
 const Gallery = mongoose.model('Gallery');
 const async = require('async');
@@ -24,7 +24,7 @@ exports.createPage = function(req, res, next) {
   req.body.start = req.body.start ? req.body.start : Date.now();
   // req.body.end = req.body.end ? new Date(req.body.start).getTime() : undefined;
 
-  Page.createPage(req.body)
+  Article.createPage(req.body)
     .then(util.sendObjectAsHttpResponse.bind(null, res, 201))
     .catch(util.sendObjectAsHttpResponse.bind(null, res, 400));
 };
@@ -44,13 +44,13 @@ exports.editPage = function(req, res, next) {
   req.body.start = req.body.start ? req.body.start : Date.now();
   // req.body.end = req.body.end ? new Date(req.body.start).getTime() : undefined;
 
-  Page.editPage(req.params.id, req.body)
+  Article.editPage(req.params.id, req.body)
     .then(util.sendObjectAsHttpResponse.bind(null, res, 202))
     .catch(util.sendObjectAsHttpResponse.bind(null, res, 400));
 };
 
 exports.deletePage = function(req, res, next) {
-  Page.deletePage(req.params.id)
+  Article.deletePage(req.params.id)
     .then(util.sendObjectAsHttpResponse.bind(null, res, 202))
     .catch(util.passNext.bind(null, next));
 };

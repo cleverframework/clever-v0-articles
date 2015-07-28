@@ -37,8 +37,8 @@ function hasErrors(err) {
 
 // Validations
 function validateUniqueSlug(value, callback) {
-  const Page = mongoose.model('Page');
-  Page.find({
+  const Article = mongoose.model('Article');
+  Article.find({
     $and: [{
       slug: value,
       deleted: false
@@ -58,7 +58,7 @@ function escapeProperty(value) {
 };
 
 // Schema
-const PageSchema = new Schema({
+const ArticleSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -105,50 +105,50 @@ const PageSchema = new Schema({
 });
 
 // Virtuals
-PageSchema.virtual('created_ago').set(function(url) {
-  throw new Error('Page::created_ago cannot be set.');
+ArticleSchema.virtual('created_ago').set(function(url) {
+  throw new Error('Article::created_ago cannot be set.');
 }).get(function() {
   if(this.created === null) return null;
   return moment(this.created).fromNow();
 });
 
-PageSchema.virtual('modified_ago').set(function(url) {
-  throw new Error('Page::modified_ago cannot be set.');
+ArticleSchema.virtual('modified_ago').set(function(url) {
+  throw new Error('Article::modified_ago cannot be set.');
 }).get(function() {
     if(!this.modified || this.modified === null) return null;
   return moment(this.modified).fromNow();
 });
 
-PageSchema.virtual('created_format').set(function(url) {
-  throw new Error('Page::created_format cannot be set.');
+ArticleSchema.virtual('created_format').set(function(url) {
+  throw new Error('Article::created_format cannot be set.');
 }).get(function() {
   if(this.created === null) return null;
   return moment(this.created).format('MM/DD/YYYY hh:mm:ss');
 });
 
-PageSchema.virtual('modified_format').set(function(url) {
-  throw new Error('Page::modified_format cannot be set.');
+ArticleSchema.virtual('modified_format').set(function(url) {
+  throw new Error('Article::modified_format cannot be set.');
 }).get(function() {
   if(!this.modified || this.modified === null) return null;
   return moment(this.modified).format('MM/DD/YYYY hh:mm:ss');
 });
 
-PageSchema.virtual('start_format').set(function(url) {
-  throw new Error('Page::start_format cannot be set.');
+ArticleSchema.virtual('start_format').set(function(url) {
+  throw new Error('Article::start_format cannot be set.');
 }).get(function() {
   if(this.start === null) return null;
   return moment(this.start).format('MM/DD/YYYY hh:mm:ss');
 });
 
-PageSchema.virtual('end_format').set(function(url) {
-  throw new Error('Page::end_format cannot be set.');
+ArticleSchema.virtual('end_format').set(function(url) {
+  throw new Error('Article::end_format cannot be set.');
 }).get(function() {
   if(!this.end || this.end === null) return null;
   return moment(this.end).format('MM/DD/YYYY hh:mm:ss');
 });
 
 // Static Methods
-PageSchema.statics = {
+ArticleSchema.statics = {
   /**
    * CountPages - return the number of pages
    *
@@ -156,9 +156,9 @@ PageSchema.statics = {
    * @api public
    */
   countPages: function() {
-    const Page = mongoose.model('Page');
+    const Article = mongoose.model('Article');
     const defer = Q.defer();
-    Page.count({}, function(err, nPages) {
+    Article.count({}, function(err, nPages) {
       if (err) return defer.reject(err);
       return defer.resolve(nPages);
     });
@@ -174,10 +174,10 @@ PageSchema.statics = {
    * @api public
    */
   getPages: function(skip, limit) {
-    const Page = mongoose.model('Page');
+    const Article = mongoose.model('Article');
     const options = skip && limit ? {skip: skip, limit: limit} : {};
     const defer = Q.defer();
-    Page.find({deleted: false}, {}, options, function(err, pages) {
+    Article.find({deleted: false}, {}, options, function(err, pages) {
       if (err) return defer.reject(err);
       return defer.resolve(pages);
     }).sort({ _id: -1 });
@@ -185,25 +185,25 @@ PageSchema.statics = {
   },
 
   /**
-   * GetPage - return the page matching the id
+   * GetPage - return the article matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
   getPage: function(id) {
-    if(!id) throw new Error('Page.getPageById: id parameter is mandatory');
-    const Page = mongoose.model('Page');
+    if(!id) throw new Error('Article.getPageById: id parameter is mandatory');
+    const Article = mongoose.model('Article');
     const defer = Q.defer();
-    Page.findOne({_id: id, deleted: false}, function(err, page) {
+    Article.findOne({_id: id, deleted: false}, function(err, article) {
       if (err) return defer.reject(err);
-      return defer.resolve(page);
+      return defer.resolve(article);
     });
     return defer.promise;
   },
 
   /**
-   * EditPageById - edit the page matching the id
+   * EditPageById - edit the article matching the id
    *
    * @param {String} id
    * @return {Object}
@@ -211,29 +211,29 @@ PageSchema.statics = {
    */
   editPage: function(id, pageParams) {
 
-    if(!id) throw new Error('Page.editPageById: id parameter is mandatory');
-    const Page = mongoose.model('Page');
+    if(!id) throw new Error('Article.editPageById: id parameter is mandatory');
+    const Article = mongoose.model('Article');
     const defer = Q.defer();
 
-    function save(page) {
+    function save(article) {
 
       // Reset
-      page.private = false;
+      article.private = false;
 
       Object.keys(pageParams).forEach(function (key, index) {
-        page[key] = pageParams[key];
+        article[key] = pageParams[key];
       });
 
-      page.modified = Date.now();
+      article.modified = Date.now();
 
-      page.save(function(err) {
+      article.save(function(err) {
         const errors = hasErrors(err);
         if(errors) return defer.reject(errors);
-        defer.resolve(page);
+        defer.resolve(article);
       });
     }
 
-    Page.getPage(id)
+    Article.getPage(id)
       .then(save)
       .catch(defer.reject);
 
@@ -241,18 +241,18 @@ PageSchema.statics = {
   },
 
   /**
-   * deletePage - delete logically the page matching the id
+   * deletePage - delete logically the article matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
   deletePage: function(id) {
-    if(!id) throw new Error('Page.deletePageById: id parameter is mandatory');
-    // const Page = mongoose.model('Page');
+    if(!id) throw new Error('Article.deletePageById: id parameter is mandatory');
+    // const Article = mongoose.model('Article');
     // const defer = Q.defer();
     //
-    // Page.remove({_id: page._id}, function(err, result) {
+    // Article.remove({_id: article._id}, function(err, result) {
     //   if (err) return defer.reject(err);
     //   return defer.resolve(result);
     // });
@@ -262,14 +262,14 @@ PageSchema.statics = {
   },
 
   createPage: function(pageParams) {
-    const Page = mongoose.model('Page');
-    const page = new Page(pageParams);
+    const Article = mongoose.model('Article');
+    const article = new Article(pageParams);
 
     const defer = Q.defer();
-    page.save(function(err) {
+    article.save(function(err) {
       const errors = hasErrors(err);
       if(errors) return defer.reject(errors);
-      defer.resolve(page);
+      defer.resolve(article);
     });
 
     return defer.promise;
@@ -277,10 +277,10 @@ PageSchema.statics = {
 }
 
 // Instance Methods
-PageSchema.methods = {
+ArticleSchema.methods = {
 
   /**
-   * GetData - get page data
+   * GetData - get article data
    *
    * @return {Buffer}
    * @api public
@@ -306,4 +306,4 @@ PageSchema.methods = {
   }
 };
 
-mongoose.model('Page', PageSchema);
+mongoose.model('Article', ArticleSchema);
