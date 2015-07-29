@@ -8,6 +8,9 @@ export default (app) => {
 
   const id = el.data('id')
 
+  // Start datetimepickers
+  $('.js-datetime').datetimepicker()
+
   el.find('.js-title').on('keyup', e => {
     el.find('.js-slug').val(slug(e.target.value))
   })

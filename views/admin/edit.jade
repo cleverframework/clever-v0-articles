@@ -3,6 +3,7 @@ extends ../../../system/views/admin/layout/admin
 block appendcss
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/jquery-ui.min.css')
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/theme.css')
+  link(rel='stylesheet', href='/public/system/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')
   link(rel='stylesheet', href='/public/system/admin/index.css')
   link(rel='stylesheet', href='/public/#{packageName}/admin/index.css')
 
@@ -33,11 +34,11 @@ block content
         .col-sm-6
           .form-group
             label(for="inputStart") Start 
-            input#inputStart.form-control(type="text", name="start", value!=pageToEdit.start_format, placeholder="dd/mm/yyyy hh:mm:ss")
+            input#inputStart.form-control.js-datetime(type="text", name="start", value!=pageToEdit.start_format, placeholder="dd/mm/yyyy hh:mm:ss")
         .col-sm-6
           .form-group
             label(for="inputEnd") End 
-            input#inputEnd.form-control(type="text", name="end", value!="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
+            input#inputEnd.form-control.js-datetime(type="text", name="end", value!="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
         
       div.row.placeholders
       
@@ -156,4 +157,6 @@ block appendjs
       $pageBlocks.disableSelection();
     });
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
+  script(src="/public/system/vendor/moment/min/moment.min.js")
+  script(src="/public/system/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js")
   script(src="/public/#{packageName}/admin/index.js")
