@@ -8,13 +8,13 @@ export default (app) => {
 
   el.find('.js-publish').on('click', e => {
     e.preventDefault()
-    app.emit('POST:publish', id, { published: true })
+    app.emit('PUT:article', id, { published: true })
     onPublishChange(true)
   })
 
   el.find('.js-unpublish').on('click', e => {
     e.preventDefault()
-    app.emit('POST:publish', id, { published: false })
+    app.emit('PUT:article', id, { published: false })
     onPublishChange(false)
   })
 
