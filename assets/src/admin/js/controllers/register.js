@@ -10,12 +10,7 @@ export default (app) => {
     app.emit(eventName, this);
   }
 
-  $('#inputTitle').bind('keyup mouseup', function(e) {
-    let replaced = $(this).val().replace(/ /g,'-');
-    replaced = replaced.replace(/'/g,'-');
-    replaced = replaced.replace(/[&\/\\#,+()$~%.":*?!`|<>{}]/g,'');
-    $('#inputSlug').val(replaced.toLowerCase());
-  });
+
 
   $('#addTextBlock').click(function(e) {
     callListener.call(this, e, 'addTextBlock');

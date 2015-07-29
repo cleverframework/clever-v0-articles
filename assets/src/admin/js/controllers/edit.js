@@ -1,3 +1,5 @@
+import slug from 'slugg'
+
 export default (app) => {
 
   let el = $('.js-article-edit')
@@ -5,6 +7,10 @@ export default (app) => {
   if (el.length === 0) return
 
   const id = el.data('id')
+
+  el.find('.js-title').on('keyup', e => {
+    el.find('.js-slug').val(slug(e.target.value))
+  })
 
   el.find('.js-publish').on('click', e => {
     e.preventDefault()

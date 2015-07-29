@@ -10,6 +10,10 @@ block content
     .row
       .col-sm-8
         h1.page-header.text-capitalize #{packageName}
+          a.js-create(href="#", data-toggle="tooltip", data-placement="right" title="Add new")
+            span.fa-stack.fa-lg
+              i.fa.fa-circle-o.fa-stack-2x
+              i.fa.fa-plus.fa-stack-1x
       .col-sm-4
         form
           .input-group
@@ -31,9 +35,9 @@ block content
               h2.h4(style="margin-top: 0")
                 a(href="/admin/#{packageName}/#{page._id}/edit") !{page.title} 
                 if page.published
-                  a(href="#", data-toggle="tooltip", data-placement="top" title="Published"): span.fa.fa-circle.text-success(style="font-size:10px; vertical-align:3px;")
+                  span(data-toggle="tooltip", data-placement="top" title="Published"): span.fa.fa-circle.text-success(style="font-size:10px; vertical-align:3px;")
                 else
-                  a(href="#", data-toggle="tooltip", data-placement="top" title="Draft"): span.fa.fa-circle-o.text-warning(style="font-size:10px; vertical-align:3px;")
+                  span(data-toggle="tooltip", data-placement="top" title="Draft"): span.fa.fa-circle-o.text-warning(style="font-size:10px; vertical-align:3px;")
               span.small 
                 span(style="color:#666;") Last modified: 
                 | #{page.modified_ago || 'Never'}  

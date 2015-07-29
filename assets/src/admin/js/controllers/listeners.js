@@ -7,7 +7,6 @@ export default (app) => {
       data : options.postData,
       dataType : 'JSON',
       success:function(data, textStatus, jqXHR) {
-        console.log(data)
         location.href = `${options.urlCallback}/${data._id}`;
       },
       error: function(jqXHR, textStatus, errorThrown) {

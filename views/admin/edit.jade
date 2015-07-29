@@ -22,19 +22,22 @@ block content
         
       .form-group
         label(for="inputTitle") Title
-        input#inputTitle.form-control(type="text", name="title", value!=pageToEdit.title, placeholder="")
+        input#inputTitle.form-control.js-title(type="text", name="title", value!=pageToEdit.title, placeholder="")
       .form-group
         label(for="inputSlug") Slug
-        input#inputSlug.form-control(type="text", name="slug", value!=pageToEdit.slug, placeholder="")
+        input#inputSlug.form-control.js-slug(type="text", name="slug", value!=pageToEdit.slug, placeholder="")
       .form-group
         label(for="inputStandfirst") Standfirst 
-        input#inputStandfirst.form-control(type="text", name="standfirst", value!=pageToEdit.standfirst, placeholder="")
-      .form-group
-        label(for="inputStart") Start 
-        input#inputStart.form-control(type="text", name="start", value!=pageToEdit.start_format, placeholder="dd/mm/yyyy hh:mm:ss")
-      .form-group
-        label(for="inputEnd") End 
-        input#inputEnd.form-control(type="text", name="end", value!="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
+        textarea#inputStandfirst.form-control(name="standfirst")=pageToEdit.standfirst
+      .row
+        .col-sm-6
+          .form-group
+            label(for="inputStart") Start 
+            input#inputStart.form-control(type="text", name="start", value!=pageToEdit.start_format, placeholder="dd/mm/yyyy hh:mm:ss")
+        .col-sm-6
+          .form-group
+            label(for="inputEnd") End 
+            input#inputEnd.form-control(type="text", name="end", value!="#{pageToEdit.end_format || ''}", placeholder="dd/mm/yyyy hh:mm:ss")
         
       div.row.placeholders
       
