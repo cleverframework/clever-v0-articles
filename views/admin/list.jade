@@ -6,7 +6,7 @@ block appendcss
 
 block content
   
-  .col-main
+  .col-main.js-article-list
     .row
       .col-sm-8
         h1.page-header.text-capitalize #{packageName}
@@ -19,7 +19,7 @@ block content
                 span.fa.fa-search(aria-hidden="true")
 
     each page in pages
-      .panel.panel-default
+      .panel.panel-default.js-article(data-id="#{page._id}")
         .panel-body
           
           //- span
@@ -43,14 +43,17 @@ block content
                   | Quick Actions 
                   span.caret
                 ul.dropdown-menu
-                  li: a(href="#", data-id="#{page._id}") Publish
+                  if !page.published
+                    li: a.js-publish(href="#", data-id="#{page._id}") Publish
+                  else
+                    li: a.js-unpublish(href="#", data-id="#{page._id}") Unpublish
                   li: a.deletePage(href="#", data-id="#{page._id}") Delete
             
-    a(href="/admin/#{packageName}/create").btn.btn-primary Create
+    a(href="#").btn.btn-primary.js-create Create
     
     - var nPages = Math.ceil(nPages / 10);
     - var i = 0;
-    
+    div(pages=nPages)
     if nPages > 0
       nav.pull-right
         ul.pagination
@@ -71,6 +74,7 @@ block appendjs
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
   script.
     window.urlreload = false;
+    window.packageName = '#{packageName}'
     window.csrf = '#{csrfToken}';
     window.images = [];
     window.galleries = [];

@@ -8,7 +8,7 @@ block appendcss
 
 block content
   
-  form#editPage.row(method="PUT", action="/api/pages/#{pageToEdit._id}", autocomplete="off")
+  form#editPage.row.js-article-edit(method="PUT", action="/api/#{packageName}/#{pageToEdit._id}", autocomplete="off", data-id="#{pageToEdit._id}")
     .col-sm-8.col-main
       
       div#editPageError(class="alert alert-danger hidden", role="alert")
@@ -133,17 +133,18 @@ block content
       button#editPageBtn.btn.btn-lg.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
       
       .btn-group.sidebar-buttons
-        button.btn.btn-default(type="button", class=(!pageToEdit.published) ? 'active' : '') Draft
-        button.btn.btn-default(type="button", class=(pageToEdit.published) ? 'active': '') Published
+        button.btn.btn-default.js-unpublish(type="button", class=(!pageToEdit.published) ? 'active' : '') Draft
+        button.btn.btn-default.js-publish(type="button", class=(pageToEdit.published) ? 'active': '') Published
           
       hr
       .text-right
-        a.text-danger(href="#", data-id="#{pageToEdit._id}") Delete article
+        a.text-danger.js-delete(href="#", data-id="#{pageToEdit._id}") Delete article
 
 block appendjs
   script.
     window.urlreload = '/admin/pages';
     window.csrf = '#{csrfToken}';
+    window.packageName = '#{packageName}'
     window.imageList = JSON.parse('!{imageList}');
     window.galleryList = JSON.parse('!{galleryList}');
     $(function() {

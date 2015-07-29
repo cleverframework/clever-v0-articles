@@ -11,8 +11,8 @@ const util = require('../util');
 
 exports.createPage = function(req, res, next) {
 
-  req.assert('title', 'Gallery must have a title').notEmpty();
-  req.assert('slug', 'Gallery must have a slug').notEmpty();
+  req.assert('title', 'Article must have a title').notEmpty();
+  req.assert('slug', 'Article must have a slug').notEmpty();
   req.assert('start', 'Start must be a date').optional().isDate();
   req.assert('end', 'End must be a date').optional().isDate();
 
@@ -31,8 +31,8 @@ exports.createPage = function(req, res, next) {
 
 exports.editPage = function(req, res, next) {
 
-  req.assert('title', 'Gallery must have a title').notEmpty();
-  req.assert('slug', 'Gallery must have a slug').notEmpty();
+  req.assert('title', 'Article must have a title').optional().notEmpty();
+  req.assert('slug', 'Article must have a slug').optional().notEmpty();
   req.assert('start', 'Start must be a date').optional().isDate();
   req.assert('end', 'End must be a date').optional().isDate();
 
