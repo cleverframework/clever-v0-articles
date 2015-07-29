@@ -1,0 +1,13 @@
+.modal.fade
+  .modal-dialog
+    form.modal-content.js-form(method='post', action='')
+      .modal-header
+        button.close(type="button", data-dismiss="modal", aria-label="Close")
+          span.fa.fa-close
+        h4.modal-title Create new article
+            
+      .modal-body
+        input(type='text', placeholder='Article title').form-control.js-title
+        
+      .modal-footer
+        button.js-submit.btn.btn-primary(type='submit') Create
