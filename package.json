@@ -18,7 +18,8 @@
   "visible": true,
   "dependencies": {
     "jquery-autoselect": "0.0.2",
-    "moment": "^2.10.3"
+    "moment": "^2.10.3",
+    "slugg": "^0.1.2"
   },
   "devDependencies": {
     "snazzy": "^1.0.1",
@@ -33,9 +34,7 @@
     "jadeify": "^4.4.0",
     "stylus": "^0.51.1",
     "stylus-mixins": "^0.2.1",
-    "slugg": "^0.1.2",
-    "stylus": "^0.52.0",
-    "stylus-mixins": "^0.2.1"
+    "stylus": "^0.52.0"
   },
   "license": "MIT"
 }

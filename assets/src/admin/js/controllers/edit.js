@@ -1,4 +1,5 @@
 import slug from 'slugg'
+import Blocks from '../components/blocks'
 
 export default (app) => {
 
@@ -8,13 +9,14 @@ export default (app) => {
 
   const id = el.data('id')
 
-  // Start datetimepickers
+  // Form
   $('.js-datetime').datetimepicker()
 
   el.find('.js-title').on('keyup', e => {
     el.find('.js-slug').val(slug(e.target.value))
   })
 
+  // Actions
   el.find('.js-publish').on('click', e => {
     e.preventDefault()
     app.emit('PUT:article', id, { published: true })
@@ -33,6 +35,10 @@ export default (app) => {
     app.emit('DELETE:article', id)
     window.location = `/admin/${packageName}/`
   })
+
+  // Blocks
+
+  const blocks = new Blocks(el.find('.js-blocks'), app)
 
   function onPublishChange(published) {
     el.find('.js-publish, .js-unpublish').removeClass('active')

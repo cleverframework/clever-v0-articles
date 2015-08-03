@@ -1,8 +1,21 @@
-.row
-  .col-sm-3
-    button.btn.btn-default.btn-lg(type="button")
+.blocks-list.clearfix
+  .block-list__item
+    button.btn.btn-default.js-add-block(type="button", data-block='text')
       span.fa.fa-paragraph
       div Text
-  .col-sm-3
-  .col-sm-3
-  .col-sm-3
+  .block-list__item
+    button.btn.btn-default.js-add-block(type="button", data-block='quote')
+      span.fa.fa-quote-left
+      div Quote
+  .block-list__item
+    button.btn.btn-default.js-add-block(type="button", data-block='image')
+      span.fa.fa-image
+      div Image
+  .block-list__item
+    button.btn.btn-default.js-add-block(type="button", data-block='text')
+      span.fa.fa-th-large
+      div Gallery
+  .block-list__item
+    button.btn.btn-default.js-add-block(type="button", data-block='text')
+      span.fa.fa-film
+      div Video

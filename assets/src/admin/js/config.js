@@ -1,8 +1,8 @@
 export default (app) => {
-  let config = {};
+  const config = {};
   app.config = config;
 
-  config.name = 'Clever Administration :: Pages';
+  config.name = `Clever Administration - ${window.packageName}`;
 
   return app;
 }

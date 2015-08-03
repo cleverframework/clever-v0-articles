@@ -42,7 +42,12 @@ block content
         
       div.row.placeholders
       
-      h2 Blocks
+      h2.h3 Body
+      
+      .js-blocks
+        include blocks/add
+        .js-container
+      
       #pageBlocks
       
         each block, index in pageToEdit.blocks 
@@ -101,7 +106,8 @@ block content
                 i.fa.fa-minus.pull-right(style='margin-right: 5px;', data-target='#{index}')
                 i.fa.fa-sort.pull-right
               input.form-control.page-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY')
-        
+    
+    
       .btn-group
         button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
           | Add 
