@@ -10,20 +10,20 @@ const async = require('async');
 const util = require('../util');
 
 // Show user list
-exports.showPages = function(ArticlesPackage, req, res, next) {
+exports.showArticles = function(ArticlesPackage, req, res, next) {
 
   let activePage = Number.parseInt(req.query.page);
   activePage = Number.isNaN(activePage) ? 0 : activePage;
   const skip = activePage * 10;
 
-  function renderPageList(pages, nPages) {
+  function renderArticleList(articles, nArticles) {
     try {
       res.send(ArticlesPackage.render('admin/list', {
         packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
         packageName: ArticlesPackage.name,
         user: req.user,
-        pages: pages,
-        nPages: nPages,
+        articles: articles,
+        nArticles: nArticles,
         activePage: activePage,
         csrfToken: req.csrfToken()
       }));
@@ -33,28 +33,28 @@ exports.showPages = function(ArticlesPackage, req, res, next) {
   }
 
   async.parallel([
-    function getPages(cb){
-      Article.getPages(skip, 10)
+    function getArticles(cb){
+      Article.getArticles(skip, 10)
         .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     },
-    function countPages(cb){
-      Article.countPages()
+    function countArticles(cb){
+      Article.countArticles()
         .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     }
   ], function(err, options){
       if(err) return util.passNext.bind(null, next);
-      renderPageList.apply(null, options);
+      renderArticleList.apply(null, options);
   });
 
 };
 
-exports.showPage = function(ArticlesPackage, req, res, next) {
-  function render(imageList, galleryList, pageToShow) {
+exports.showArticle = function(ArticlesPackage, req, res, next) {
+  function render(imageList, galleryList, articleToShow) {
     res.send(ArticlesPackage.render('admin/details', {
       packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
-      pageToShow: pageToShow,
+      articleToShow: articleToShow,
       packageName: ArticlesPackage.name,
       imageList: JSON.stringify(imageList),
       galleryList: JSON.stringify(galleryList),
@@ -67,7 +67,7 @@ exports.showPage = function(ArticlesPackage, req, res, next) {
     .then(function(imageList) {
       Gallery.getGalleryList()
         .then(function(galleryList) {
-          Article.getPage(req.params.id)
+          Article.getArticle(req.params.id)
             .then(render.bind(null, imageList, galleryList))
             .catch(util.passNext.bind(null, next));
         })
@@ -76,12 +76,12 @@ exports.showPage = function(ArticlesPackage, req, res, next) {
     .catch(util.passNext.bind(null, next));
 };
 
-exports.editPage = function(ArticlesPackage, req, res, next) {
-  function render(imageList, galleryList, pageToEdit) {
+exports.editArticle = function(ArticlesPackage, req, res, next) {
+  function render(imageList, galleryList, articleToEdit) {
     try {
       res.send(ArticlesPackage.render('admin/edit', {
         packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
-        pageToEdit: pageToEdit,
+        articleToEdit: articleToEdit,
         packageName: ArticlesPackage.name,
         imageList: JSON.stringify(imageList),
         galleryList: JSON.stringify(galleryList),
@@ -97,7 +97,7 @@ exports.editPage = function(ArticlesPackage, req, res, next) {
     .then(function(imageList) {
       Gallery.getGalleryList()
         .then(function(galleryList) {
-          Article.getPage(req.params.id)
+          Article.getArticle(req.params.id)
             .then(render.bind(null, imageList, galleryList))
             .catch(util.passNext.bind(null, next));
         })
@@ -106,7 +106,7 @@ exports.editPage = function(ArticlesPackage, req, res, next) {
     .catch(util.passNext.bind(null, next));
 };
 
-exports.createPage = function(ArticlesPackage, req, res, next) {
+exports.createArticle = function(ArticlesPackage, req, res, next) {
 
   function render(imageList, galleryList) {
     res.send(ArticlesPackage.render('admin/create', {

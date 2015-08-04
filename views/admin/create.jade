@@ -7,9 +7,9 @@ block appendcss
   link(rel='stylesheet', href='/public/#{packageName}/admin/index.css')
 
 block content
-  form#createPage.row(method="POST", action="/api/#{packageName}", autocomplete="off")
+  form#createArticle.row(method="POST", action="/api/#{packageName}", autocomplete="off")
     .col-sm-9.col-main
-      h1.page-header New Page 
+      h1.article-header New Article 
 
       .form-group
         label(for="inputTitle") Title
@@ -32,8 +32,8 @@ block content
         
       div.row.placeholders
       
-      h2.h3 Page body
-      #pageBlocks
+      h2.h3 Article body
+      #articleBlocks
       .btn-group
         button.btn.btn-info.dropdown-toggle(type="button", id="addBlock", data-toggle="dropdown", aria-expanded="false")
           | Add 
@@ -65,9 +65,9 @@ block content
       input#inputCsrf(type="hidden", name="_csrf", value="#{csrfToken}")
     
     .col-sm-3
-      button#createPageBtn.btn.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
+      button#createArticleBtn.btn.btn-success.btn-block(type="submit", style="margin-bottom: 15px;") Save
       a.text-danger(href="/admin/#{packageName}") Cancel
-      div#createPageError(class="alert alert-danger hidden", role="alert")
+      div#createArticleError(class="alert alert-danger hidden", role="alert")
         b
           |	Oops! 
         span.message
@@ -83,9 +83,9 @@ block appendjs
     window.imageList = JSON.parse('!{imageList}');
     window.galleryList = JSON.parse('!{galleryList}');
     $(function() {
-      $pageBlocks = $('#pageBlocks');
-      $pageBlocks.sortable();
-      $pageBlocks.disableSelection();
+      $articleBlocks = $('#articleBlocks');
+      $articleBlocks.sortable();
+      $articleBlocks.disableSelection();
     });
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
   script(src="/public/#{packageName}/admin/index.js")

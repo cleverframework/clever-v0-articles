@@ -2,8 +2,8 @@ import config from './config';
 import events from 'events';
 
 // controllers
-import listener from './controllers/listeners';
-import register from './controllers/register';
+// import listener from './controllers/listeners';
+// import register from './controllers/register';
 import list from './controllers/list';
 import edit from './controllers/edit';
 
@@ -23,8 +23,8 @@ let app = window.app = new App();
 config(app);
 
 // ctrls
-listener(app);
-register(app);
+// listener(app);
+// register(app);
 list(app);
 edit(app);
 

@@ -150,49 +150,49 @@ ArticleSchema.virtual('end_format').set(function(url) {
 // Static Methods
 ArticleSchema.statics = {
   /**
-   * CountPages - return the number of pages
+   * CountArticles - return the number of articles
    *
    * @return {Object}
    * @api public
    */
-  countPages: function() {
+  countArticles: function() {
     const Article = mongoose.model('Article');
     const defer = Q.defer();
-    Article.count({}, function(err, nPages) {
+    Article.count({}, function(err, nArticles) {
       if (err) return defer.reject(err);
-      return defer.resolve(nPages);
+      return defer.resolve(nArticles);
     });
     return defer.promise;
   },
 
   /**
-   * GetPages - return the list of pages
+   * GetArticles - return the list of articles
    *
    * @param {Integer} skip
    * @param {Integer} limit
    * @return {Object}
    * @api public
    */
-  getPages: function(skip, limit) {
+  getArticles: function(skip, limit) {
     const Article = mongoose.model('Article');
-    const options = skip && limit ? {skip: skip, limit: limit} : {};
+    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
     const defer = Q.defer();
-    Article.find({deleted: false}, {}, options, function(err, pages) {
+    Article.find({deleted: false}, {}, options, function(err, articles) {
       if (err) return defer.reject(err);
-      return defer.resolve(pages);
+      return defer.resolve(articles);
     }).sort({ _id: -1 });
     return defer.promise;
   },
 
   /**
-   * GetPage - return the article matching the id
+   * GetArticle - return the article matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
-  getPage: function(id) {
-    if(!id) throw new Error('Article.getPageById: id parameter is mandatory');
+  getArticle: function(id) {
+    if(!id) throw new Error('Article.getArticleById: id parameter is mandatory');
     const Article = mongoose.model('Article');
     const defer = Q.defer();
     Article.findOne({_id: id, deleted: false}, function(err, article) {
@@ -203,15 +203,15 @@ ArticleSchema.statics = {
   },
 
   /**
-   * EditPageById - edit the article matching the id
+   * EditArticleById - edit the article matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
-  editPage: function(id, pageParams) {
+  editArticle: function(id, articleParams) {
 
-    if(!id) throw new Error('Article.editPageById: id parameter is mandatory');
+    if(!id) throw new Error('Article.editArticleById: id parameter is mandatory');
     const Article = mongoose.model('Article');
     const defer = Q.defer();
 
@@ -220,8 +220,8 @@ ArticleSchema.statics = {
       // Reset
       article.private = false;
 
-      Object.keys(pageParams).forEach(function (key, index) {
-        article[key] = pageParams[key];
+      Object.keys(articleParams).forEach(function (key, index) {
+        article[key] = articleParams[key];
       });
 
       article.modified = Date.now();
@@ -233,7 +233,7 @@ ArticleSchema.statics = {
       });
     }
 
-    Article.getPage(id)
+    Article.getArticle(id)
       .then(save)
       .catch(defer.reject);
 
@@ -241,14 +241,14 @@ ArticleSchema.statics = {
   },
 
   /**
-   * deletePage - delete logically the article matching the id
+   * deleteArticle - delete logically the article matching the id
    *
    * @param {String} id
    * @return {Object}
    * @api public
    */
-  deletePage: function(id) {
-    if(!id) throw new Error('Article.deletePageById: id parameter is mandatory');
+  deleteArticle: function(id) {
+    if(!id) throw new Error('Article.deleteArticleById: id parameter is mandatory');
     // const Article = mongoose.model('Article');
     // const defer = Q.defer();
     //
@@ -258,12 +258,12 @@ ArticleSchema.statics = {
     // });
     //
     // return defer.promise;
-    return this.editPage(id, {deleted: true})
+    return this.editArticle(id, {deleted: true})
   },
 
-  createPage: function(pageParams) {
+  createArticle: function(articleParams) {
     const Article = mongoose.model('Article');
-    const article = new Article(pageParams);
+    const article = new Article(articleParams);
 
     const defer = Q.defer();
     article.save(function(err) {
@@ -286,7 +286,7 @@ ArticleSchema.methods = {
    * @api public
    */
   getData: function() {
-    // const PageImage = mongoose.model('PageImage');
+    // const ArticleImage = mongoose.model('ArticleImage');
     const defer = Q.defer();
 
     // TODO: implementation

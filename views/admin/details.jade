@@ -4,44 +4,44 @@ block appendcss
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/jquery-ui.min.css')
   link(rel='stylesheet', href='/public/files/vendor/jquery-ui/themes/cupertino/theme.css')
   link(rel='stylesheet', href='/public/system/admin/index.css')
-  link(rel='stylesheet', href='/public/pages/admin/index.css')
+  link(rel='stylesheet', href='/public/articles/admin/index.css')
 
 block content
-  h1.page-header
-    | Pages: 
-    span(style="color: #666") #{pageToShow.title} [Details]
+  h1.article-header
+    | Articles: 
+    span(style="color: #666") #{articleToShow.title} [Details]
     div.row.placeholders
-  form#createPage.col-sm-8(method="POST", action="/api/pages", autocomplete="off")
+  form#createArticle.col-sm-8(method="POST", action="/api/articles", autocomplete="off")
   
     h2 Headers
     .form-group
       label(for="inputTitle") Title
-      input#inputTitle.form-control(type="text", name="title", value="#{pageToShow.title}", placeholder="", maxlength="32", disabled)
+      input#inputTitle.form-control(type="text", name="title", value="#{articleToShow.title}", placeholder="", maxlength="32", disabled)
     .form-group
       label(for="inputSlug") Slug
-      input#inputSlug.form-control(type="text", name="slug", value="#{pageToShow.slug}", placeholder="", maxlength="32", disabled)
+      input#inputSlug.form-control(type="text", name="slug", value="#{articleToShow.slug}", placeholder="", maxlength="32", disabled)
     .form-group
       label(for="inputStandfirst") Standfirst 
-      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{pageToShow.standfirst}", placeholder="", disabled)
+      input#inputStandfirst.form-control(type="text", name="standfirst", value="#{articleToShow.standfirst}", placeholder="", disabled)
     .form-group
       label(for="inputStart") Start 
-      input#inputStart.form-control(type="text", name="start", value="#{pageToShow.start_format}", placeholder="", disabled)
+      input#inputStart.form-control(type="text", name="start", value="#{articleToShow.start_format}", placeholder="", disabled)
     .form-group
       label(for="inputEnd") End 
-      input#inputEnd.form-control(type="text", name="end", value="#{pageToShow.end_format || 'Never'}", placeholder="", disabled)
+      input#inputEnd.form-control(type="text", name="end", value="#{articleToShow.end_format || 'Never'}", placeholder="", disabled)
     .form-group
       label(for="inputCreated") Created
-      input#inputCreated.form-control(type="text", name="created", value="#{pageToShow.created_format} (#{pageToShow.created_ago})", placeholder="Created", disabled)  
+      input#inputCreated.form-control(type="text", name="created", value="#{articleToShow.created_format} (#{articleToShow.created_ago})", placeholder="Created", disabled)  
     .form-group
       label(for="inputModified") Modified
-      input#inputModified.form-control(type="text", name="modified", value="#{pageToShow.modified_format|| 'Never'} #{pageToShow.modified_format ? '(' + pageToShow.modified_ago + ')' : ''}", placeholder="Modified", disabled)  
+      input#inputModified.form-control(type="text", name="modified", value="#{articleToShow.modified_format|| 'Never'} #{articleToShow.modified_format ? '(' + articleToShow.modified_ago + ')' : ''}", placeholder="Modified", disabled)  
       
     div.row.placeholders
     
     h2 Blocks
-    #pageBlocks
+    #articleBlocks
     
-      each block, index in pageToShow.blocks 
+      each block, index in articleToShow.blocks 
         
         if block.type == 'text'
           .form-group(style='display: block;')
@@ -50,14 +50,14 @@ block content
                 b TEXT
               // i.fa.fa-minus.pull-right(style='margin-right: 5px;')
               // i.fa.fa-sort.pull-right
-            textarea.form-control.page-blocks(data-type='text', name='texts[]', placeholder='Feel free to write soemthing...', rows='5', disabled) #{block.value}
+            textarea.form-control.article-blocks(data-type='text', name='texts[]', placeholder='Feel free to write soemthing...', rows='5', disabled) #{block.value}
             
         else if block.type == 'quote'    
           .form-group(style='display: block;')
             label(style='width: 100%;')
               span.pull-left
                 b QUOTE
-            textarea.form-control.page-blocks(data-type='quote', name='quotes[]', placeholder='Feel free to write soemthing...', rows='5', disabled) #{block.value}
+            textarea.form-control.article-blocks(data-type='quote', name='quotes[]', placeholder='Feel free to write soemthing...', rows='5', disabled) #{block.value}
         
         else if block.type == 'image'     
           .form-group(style='display: block;')
@@ -66,7 +66,7 @@ block content
                 b IMAGE
               // i.fa.fa-minus.pull-right(style='margin-right: 5px;')
               // i.fa.fa-sort.pull-right
-            select.form-control.page-blocks(data-type='image', name='images[]', placeholder='Select an image from your library', disabled)
+            select.form-control.article-blocks(data-type='image', name='images[]', placeholder='Select an image from your library', disabled)
               option(value='-1')
               each imgEl in JSON.parse(imageList)  
                 if imgEl._id == block.value
@@ -81,7 +81,7 @@ block content
                 b GALLERY
               // i.fa.fa-minus.pull-right(style='margin-right: 5px;')
               // i.fa.fa-sort.pull-right
-            select.form-control.page-blocks(data-type='gallery', name='images[]', placeholder='Select a gallery from your library', disabled)
+            select.form-control.article-blocks(data-type='gallery', name='images[]', placeholder='Select a gallery from your library', disabled)
               option(value='-1')
               each gEl in JSON.parse(galleryList)  
                 if gEl._id == block.value
@@ -96,11 +96,11 @@ block content
                 b VIDEO
               // i.fa.fa-minus.pull-right(style='margin-right: 5px;')
               // i.fa.fa-sort.pull-right
-            input.form-control.page-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY', disabled)
+            input.form-control.article-blocks(data-type='video', value='#{block.value}', name='videos[]', placeholder='https://www.youtube.com/watch?v=MV_3Dpw-BRY', disabled)
       
     div.row.placeholders
       
-    a.btn.btn-default(href="/admin/pages", style="margin-right: 5px;") &laquo;
+    a.btn.btn-default(href="/admin/articles", style="margin-right: 5px;") &laquo;
     .btn-group
       button.btn.btn-info.dropdown-toggle(type="button", data-toggle="dropdown", aria-expanded="false")
         | Modify 
@@ -108,16 +108,16 @@ block content
       |   
       ul.dropdown-menu(role="menu")
         li
-          a(href="/admin/pages/#{pageToShow._id}/edit") Edit
+          a(href="/admin/articles/#{articleToShow._id}/edit") Edit
         | 
         li
-          a.deletePage(href="#", data-id="#{pageToShow._id}") Delete
+          a.deleteArticle(href="#", data-id="#{articleToShow._id}") Delete
 
 block appendjs
   script.
-    window.urlreload = '/admin/pages';
+    window.urlreload = '/admin/articles';
     window.csrf = '#{csrfToken}';
     window.imageList = JSON.parse('!{imageList}');
     window.galleryList = JSON.parse('!{galleryList}');
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
-  script(src="/public/pages/admin/index.js")
+  script(src="/public/articles/admin/index.js")

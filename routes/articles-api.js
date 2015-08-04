@@ -15,13 +15,13 @@ let articlesApiCtrl = require('../controllers/articles-api');
 // Exports
 module.exports = function(ArticlesPackage, app, auth, database) {
 
-  // router.get('/', auth.requiresAdmin, pagesApiCtrl.getPages);
+  // router.get('/', auth.requiresAdmin, articlesApiCtrl.getArticles);
 
-  router.post('/', auth.requiresAdmin, articlesApiCtrl.createPage);
+  router.post('/', auth.requiresAdmin, articlesApiCtrl.createArticle);
 
-  router.put('/:id', auth.requiresAdmin, articlesApiCtrl.editPage);
+  router.put('/:id', auth.requiresAdmin, articlesApiCtrl.editArticle);
 
-  router.delete('/:id', auth.requiresAdmin, articlesApiCtrl.deletePage);
+  router.delete('/:id', auth.requiresAdmin, articlesApiCtrl.deleteArticle);
 
   return new CleverCore.CleverRoute(router, 'api', false);
 
