@@ -45,10 +45,21 @@ export default (app) => {
     app.emit('PUT:article', e.currentTarget.dataset.id, { published: false })
   })
 
+  el.find('.js-delete').on('click', e => {
+    e.preventDefault()
+    if(!confirm('Are you sure to want delete this article?')) return
+    app.emit('DELETE:article', e.currentTarget.dataset.id)
+  })
+
   app.on('PUT:article:response', () => window.location.reload())
+
   app.on('POST:article:response', response => {
     window.location = `/admin/${packageName}/${response._id}/edit`
   })
+
+  app.on('DELETE:article:response', () => window.location.reload())
+
+  // TODO: missing DELETE:article:error
 
   app.on('POST:article:error', error => {
     createModal.find('.js-error')

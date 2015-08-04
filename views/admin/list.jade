@@ -51,7 +51,7 @@ block content
                     li: a.js-publish(href="#", data-id="#{article._id}") Publish
                   else
                     li: a.js-unpublish(href="#", data-id="#{article._id}") Unpublish
-                  li: a.deleteArticle(href="#", data-id="#{article._id}") Delete
+                  li: a.deleteArticle.js-delete(href="#", data-id="#{article._id}") Delete
             
     a(href="#").btn.btn-primary.js-create Create
     
