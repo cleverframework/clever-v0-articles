@@ -64,8 +64,6 @@ export default class Blocks {
   }
 
   getBlock(blockName, data) {
-
-    console.log(blockName)
     const block = new this.enabledBlocks[blockName]()
     if (data) block.fromObject(data)
 

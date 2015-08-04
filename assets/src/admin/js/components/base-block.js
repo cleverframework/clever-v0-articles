@@ -5,6 +5,7 @@ export default class BaseBlock extends EventEmitter {
     super()
     this.type = type
     this.render(template)
+    this.addEvents()
   }
 
   render(template) {
