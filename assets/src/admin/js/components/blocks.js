@@ -9,6 +9,9 @@ export default class Blocks {
     this.blocks = []
     this.el = el
     this.container = this.el.find('.js-container')
+    this.container.sortable({
+      handle: ".block-header"
+    })
     this.enabledBlocks = {
       text,
       image,
@@ -35,9 +38,12 @@ export default class Blocks {
     const target = $(e.currentTarget)
 
     this.blocks.push(block)
-    
+
     if (target.parents('.js-container').length) {
-      target.parents('.popover').data('bs.popover').$element.after(block.el)
+      target
+        .parents('.popover').data('bs.popover').$element.parent()
+        .after(block.el)
+
     } else {
       block.el.prependTo(this.container)
     }
