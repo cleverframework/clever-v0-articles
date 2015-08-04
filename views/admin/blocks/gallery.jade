@@ -1,0 +1,8 @@
+extend base
+  
+block content
+  .form-group
+    select.form-control(name='value', placeholder='Select a gallery')
+      option(value='', disabled, selected) Select a gallery
+      each gallery in galleries
+        option(value='#{gallery._id}') #{gallery.title}

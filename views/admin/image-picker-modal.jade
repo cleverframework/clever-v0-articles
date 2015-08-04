@@ -1,0 +1,16 @@
+.modal.fade
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h4.modal-title Pick an image
+            
+      .modal-body
+        .container-fluid.image-picker__container
+          .row
+            each image in images
+              .col-sm-3
+                .image-picker__thumb.thumbnail.js-image(data-id=image._id, data-src=image.url)
+                  img.img-responsive(src=image.url)
+        
+      .modal-footer
+        button.js-confirm.btn.btn-primary(type='button') Confirm

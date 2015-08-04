@@ -1,7 +1,10 @@
 extend base
-
-block header
-  span Quote!
   
 block content
-  p There will be quote
+  .form-group
+    textarea.form-control(name='value', placeholder='Quote text')
+  .form-horizontal
+    .form-group
+      label.control-label.col-sm-3 Credit
+      .col-sm-9
+        input.form-control(type='text', name='credit')

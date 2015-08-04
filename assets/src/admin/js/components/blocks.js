@@ -1,6 +1,8 @@
 import text from './text'
 import image from './image'
 import quote from './quote'
+import video from './video'
+import gallery from './gallery'
 import popover from '../../../../../views/admin/blocks/popover.jade'
 
 export default class Blocks {
@@ -15,9 +17,12 @@ export default class Blocks {
     this.enabledBlocks = {
       text,
       image,
-      quote
+      quote,
+      gallery,
+      video
     }
     this._bindEvents()
+    this._addExistingBlocks()
   }
 
   _bindEvents() {
@@ -30,15 +35,20 @@ export default class Blocks {
       trigger: 'focus'
     })
 
-    $('body').on('click', '.js-add-block', this.addBlock.bind(this))
+    $('body').on('click', '.js-add-block', this.onAddBlockClick.bind(this))
   }
 
-  addBlock(e) {
-    const block = new this.enabledBlocks[$(e.currentTarget).data('block')]()
+  _addExistingBlocks() {
+    const existingBlocks = this.el.data('blocks')
+    if (existingBlocks && existingBlocks.length) {
+      this.fromArray(existingBlocks)
+    }
+  }
+
+  onAddBlockClick(e) {
     const target = $(e.currentTarget)
-
-    this.blocks.push(block)
-
+    const blockName = target.data('block')
+    const block = this.getBlock(blockName)
     if (target.parents('.js-container').length) {
       target
         .parents('.popover').data('bs.popover').$element.parent()
@@ -47,5 +57,33 @@ export default class Blocks {
     } else {
       block.el.prependTo(this.container)
     }
+
+    if (block.type === 'image') block.open()
+
+    this.blocks.push(block)
+  }
+
+  getBlock(blockName, data) {
+
+    console.log(blockName)
+    const block = new this.enabledBlocks[blockName]()
+    if (data) block.fromObject(data)
+
+    block.on('delete', () => {
+      this.blocks.splice(this.blocks.indexOf(block), 1)
+      block.el.remove()
+    })
+
+    return block
+  }
+
+  toArray() {
+    return this.blocks.map(block => block.toObject())
+  }
+
+  fromArray(data) {
+    data.sort((a, b) => a.order - b.order)
+    this.blocks = data.map(block => this.getBlock(block.type, block))
+    this.blocks.forEach(block => block.el.appendTo(this.container))
   }
 }

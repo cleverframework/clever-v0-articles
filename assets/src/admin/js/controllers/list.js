@@ -23,6 +23,7 @@ export default (app) => {
 
     createModal.on('submit', '.js-form', e => {
       e.preventDefault()
+      createModal.find('.js-error').hide()
       const title = createModal.find('.js-title').val()
       app.emit('POST:article', { title: title, slug: slug(title) })
     })
@@ -50,7 +51,9 @@ export default (app) => {
   })
 
   app.on('POST:article:error', error => {
-    console.log(error[0].msg)
+    createModal.find('.js-error')
+      .text(error[0].msg)
+      .show()
   })
 
 }

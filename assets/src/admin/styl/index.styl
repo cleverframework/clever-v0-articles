@@ -73,19 +73,22 @@
 
 
 .block-header
-  // padding: 0 0px
-  height: 30px
+  padding: 0 10px
+  height: 34px
   cursor: move
   &:hover
     background-color: #eee
-    .fa
+    .fa-sort
       color: #666
 
-  .fa
+  .fa-sort
     display: inline-block
     color: #ccc
-    width: 35px
-    line-height: 27px
+    // width: 35px
+    line-height: 34px
+
+  .btn
+    margin-top: 6px
 
 .text-editor
   height: 200px
@@ -98,3 +101,14 @@
   margin-bottom: 5px
   .btn-group:not(:last-child)
     margin-right: 10px
+
+
+.image-picker__container
+  max-height: 400px
+  overflow: auto
+
+.image-picker__thumb
+  cursor: pointer
+
+.image-picker__thumb.is-selected
+  background-color: #0088cc

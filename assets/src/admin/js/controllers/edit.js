@@ -36,6 +36,21 @@ export default (app) => {
     window.location = `/admin/${packageName}/`
   })
 
+  el.find('.js-save').on('click', e => {
+    e.preventDefault()
+    const data = {
+      title: el.find('#inputTitle').val(),
+      slug: el.find('#inputSlug').val(),
+      standfirst: el.find('#inputStandfirst').val(),
+      start: el.find('#inputStart').val().trim(' ') === '' ? undefined : el.find('#inputStart').val(),
+      end: el.find('#inputEnd').val().trim(' ') === '' ? undefined : el.find('#inputEnd').val(),
+      blocks: blocks.toArray(),
+      _csrf: el.find('#inputCsrf').val()
+    }
+
+    app.emit('PUT:article', el.data('id'), data)
+  })
+
   // Blocks
 
   const blocks = new Blocks(el.find('.js-blocks'), app)
@@ -47,6 +62,15 @@ export default (app) => {
     } else {
       el.find('.js-unpublish').addClass('active')
     }
-
   }
+
+  // App messages
+  app.on('PUT:article:response', () => window.location.reload())
+  app.on('PUT:article:error', error => {
+    el.find('.js-errors')
+      .removeClass('hidden')
+      .find('.js-msg').text(error[0].msg)
+    window.scrollTo(0,0)
+  })
+
 }
