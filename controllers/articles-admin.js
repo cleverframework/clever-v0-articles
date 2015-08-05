@@ -15,6 +15,7 @@ exports.showArticles = function(ArticlesPackage, req, res, next) {
   let activePage = Number.parseInt(req.query.page);
   activePage = Number.isNaN(activePage) ? 0 : activePage;
   const skip = activePage * 10;
+  const search = req.query.search;
 
   function renderArticleList(articles, nArticles) {
     try {
@@ -34,12 +35,12 @@ exports.showArticles = function(ArticlesPackage, req, res, next) {
 
   async.parallel([
     function getArticles(cb){
-      Article.getArticles(skip, 10)
+      Article.getArticles(skip, 10, search)
         .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     },
     function countArticles(cb){
-      Article.countArticles()
+      Article.countArticles(search)
         .then(cb.bind(null, null))
         .catch(util.passNext.bind(null, cb));
     }

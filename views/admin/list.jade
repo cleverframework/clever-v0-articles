@@ -15,9 +15,9 @@ block content
               i.fa.fa-circle-o.fa-stack-2x
               i.fa.fa-plus.fa-stack-1x
       .col-sm-4
-        form
+        form(action="/admin/articles", method="GET")
           .input-group
-            input.text-input(type="search", class="form-control", placeholder="Search")
+            input.text-input(type="search", name="search", class="form-control", placeholder="Search")
             span.input-group-btn
               button.btn.btn-default(type="submit")
                 span.fa.fa-search(aria-hidden="true")

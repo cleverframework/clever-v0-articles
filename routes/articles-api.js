@@ -15,7 +15,7 @@ let articlesApiCtrl = require('../controllers/articles-api');
 // Exports
 module.exports = function(ArticlesPackage, app, auth, database) {
 
-  // router.get('/', auth.requiresAdmin, articlesApiCtrl.getArticles);
+  router.get('/', articlesApiCtrl.getArticles);
 
   router.post('/', auth.requiresAdmin, articlesApiCtrl.createArticle);
 

@@ -75,6 +75,10 @@ const ArticleSchema = new Schema({
     default: '',
     get: escapeProperty
   },
+  category: {
+    type: String,
+    default: 'articles'
+  },
   start: {
     type: Date,
     default: Date.now
@@ -103,6 +107,9 @@ const ArticleSchema = new Schema({
     default: false
   }
 });
+
+// Indexes
+ArticleSchema.index({ title: 'text' });
 
 // Virtuals
 ArticleSchema.virtual('created_ago').set(function(url) {
@@ -152,13 +159,18 @@ ArticleSchema.statics = {
   /**
    * CountArticles - return the number of articles
    *
+   * @param {String} search
    * @return {Object}
    * @api public
    */
-  countArticles: function() {
+  countArticles: function(search) {
     const Article = mongoose.model('Article');
     const defer = Q.defer();
-    Article.count({}, function(err, nArticles) {
+
+    const query = search ? { $text: { $search: search } }: {};
+    query.deleted = false;
+
+    Article.count(query, function(err, nArticles) {
       if (err) return defer.reject(err);
       return defer.resolve(nArticles);
     });
@@ -170,14 +182,19 @@ ArticleSchema.statics = {
    *
    * @param {Integer} skip
    * @param {Integer} limit
+   * @param {String} search
    * @return {Object}
    * @api public
    */
-  getArticles: function(skip, limit) {
+  getArticles: function(skip, limit, search) {
     const Article = mongoose.model('Article');
-    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
     const defer = Q.defer();
-    Article.find({deleted: false}, {}, options, function(err, articles) {
+
+    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
+    const query = search ? { $text: { $search: search } }: {};
+    query.deleted = false;
+
+    Article.find(query, {}, options, function(err, articles) {
       if (err) return defer.reject(err);
       return defer.resolve(articles);
     }).sort({ _id: -1 });
@@ -258,7 +275,7 @@ ArticleSchema.statics = {
     // });
     //
     // return defer.promise;
-    return this.editArticle(id, {deleted: true})
+    return this.editArticle(id, {deleted: true});
   },
 
   createArticle: function(articleParams) {
