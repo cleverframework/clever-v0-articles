@@ -14,9 +14,10 @@ exports.getArticles = function(req, res, next) {
   let activePage = Number.parseInt(req.query.page);
   activePage = Number.isNaN(activePage) ? 0 : activePage;
   const skip = activePage * 10;
+  const category = req.query.category;
   const search = req.query.search;
 
-  Article.getArticles(skip, 10, search)
+  Article.getArticles(category, skip, 10, search)
     .then(res.json.bind(res))
     .catch(util.passNext.bind(null, next));
 

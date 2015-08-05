@@ -159,17 +159,19 @@ ArticleSchema.statics = {
   /**
    * CountArticles - return the number of articles
    *
+   * @param {String} category
    * @param {String} search
    * @return {Object}
    * @api public
    */
-  countArticles: function(search) {
-    const Article = mongoose.model('Article');
-    const defer = Q.defer();
+  countArticles: function(category, search) {
 
     const query = search ? { $text: { $search: search } }: {};
     query.deleted = false;
+    if(category) query.category = category;
 
+    const Article = mongoose.model('Article');
+    const defer = Q.defer();
     Article.count(query, function(err, nArticles) {
       if (err) return defer.reject(err);
       return defer.resolve(nArticles);
@@ -180,20 +182,28 @@ ArticleSchema.statics = {
   /**
    * GetArticles - return the list of articles
    *
+   * @param {String} category
    * @param {Integer} skip
    * @param {Integer} limit
    * @param {String} search
    * @return {Object}
    * @api public
    */
-  getArticles: function(skip, limit, search) {
-    const Article = mongoose.model('Article');
-    const defer = Q.defer();
+  getArticles: function(category, skip, limit, search) {
 
-    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
+    if(Number.isInteger(category) && arguments.length < 4) {
+      search = limit;
+      limit = skip;
+      skip = category;
+    }
+
     const query = search ? { $text: { $search: search } }: {};
     query.deleted = false;
+    if(category) query.category = category;
 
+    const Article = mongoose.model('Article');
+    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
+    const defer = Q.defer();
     Article.find(query, {}, options, function(err, articles) {
       if (err) return defer.reject(err);
       return defer.resolve(articles);

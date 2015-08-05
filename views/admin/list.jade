@@ -25,11 +25,6 @@ block content
     each article in articles
       .panel.panel-default.js-article(data-id="#{article._id}")
         .panel-body
-          
-          //- span
-          //-   | #{article.start_format}
-          //- span
-          //-   | #{article.end_format || 'Never'}
           .row
             .col-sm-8
               h2.h4(style="margin-top: 0")
@@ -38,6 +33,10 @@ block content
                   span(data-toggle="tooltip", data-placement="top" title="Published"): span.fa.fa-circle.text-success(style="font-size:10px; vertical-align:3px;")
                 else
                   span(data-toggle="tooltip", data-placement="top" title="Draft"): span.fa.fa-circle-o.text-warning(style="font-size:10px; vertical-align:3px;")
+              span.small 
+                  span(style="color:#666;") Category: 
+                  a(href="/admin/articles?category=#{article.category}") #{article.category}
+              br
               span.small 
                 span(style="color:#666;") Last modified: 
                 | #{article.modified_ago || 'Never'}  
@@ -55,6 +54,7 @@ block content
             
     a(href="#").btn.btn-primary.js-create Create
     
+    - var url = category ? packageName + '?category=' + category + '&' : packageName + '?';
     - var nPages = Math.ceil(nArticles / 10);
     - var i = 0;
     div(articles=nPages)
@@ -62,17 +62,17 @@ block content
       nav.pull-right
         ul.pagination
           li(class=(activePage == 0) ? 'disabled' : '')
-            a(href="/admin/#{packageName}?page=#{activePage-1}", aria-label="Previous")
+            a(href="/admin/#{url}page=#{activePage-1}", aria-label="Previous")
               span(aria-hidden="true") &laquo;
               
           while i < nPages   
             li(class=(i == activePage) ? 'active' : '')
-              a(href="/admin/#{packageName}?page=#{i}")
+              a(href="/admin/#{url}page=#{i}")
                 | #{++i} 
                   
           li(class=(activePage < nPages-1) ? '' : 'disabled')
-            a(href="/admin/#{packageName}?page=#{activePage+1}", aria-label="Next")
-              span(aria-hidden="true") &raquo;        
+            a(href="/admin/#{url}page=#{activePage+1}", aria-label="Next")
+              span(aria-hidden="true") &raquo;     
               
 block appendjs
   script(src="/public/files/vendor/jquery-ui/jquery-ui.min.js")
