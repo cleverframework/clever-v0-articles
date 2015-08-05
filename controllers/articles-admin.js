@@ -51,32 +51,6 @@ exports.showArticles = function(ArticlesPackage, req, res, next) {
 
 };
 
-exports.showArticle = function(ArticlesPackage, req, res, next) {
-  function render(imageList, galleryList, articleToShow) {
-    res.send(ArticlesPackage.render('admin/details', {
-      packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
-      articleToShow: articleToShow,
-      packageName: ArticlesPackage.name,
-      imageList: JSON.stringify(imageList),
-      galleryList: JSON.stringify(galleryList),
-      user: req.user,
-      csrfToken: req.csrfToken()
-    }));
-  }
-
-  File.getImageList()
-    .then(function(imageList) {
-      Gallery.getGalleryList()
-        .then(function(galleryList) {
-          Article.getArticle(req.params.id)
-            .then(render.bind(null, imageList, galleryList))
-            .catch(util.passNext.bind(null, next));
-        })
-        .catch(util.passNext.bind(null, next));
-    })
-    .catch(util.passNext.bind(null, next));
-};
-
 exports.editArticle = function(ArticlesPackage, req, res, next) {
   function render(imageList, galleryList, articleToEdit) {
     try {
@@ -105,27 +79,4 @@ exports.editArticle = function(ArticlesPackage, req, res, next) {
         .catch(util.passNext.bind(null, next));
     })
     .catch(util.passNext.bind(null, next));
-};
-
-exports.createArticle = function(ArticlesPackage, req, res, next) {
-
-  function render(imageList, galleryList) {
-    res.send(ArticlesPackage.render('admin/create', {
-      packages: ArticlesPackage.getCleverCore().getInstance().exportablePkgList,
-      packageName: ArticlesPackage.name,
-      imageList: JSON.stringify(imageList),
-      galleryList: JSON.stringify(galleryList),
-      user: req.user,
-      csrfToken: req.csrfToken()
-    }));
-  }
-
-  File.getImageList()
-    .then(function(imageList) {
-      Gallery.getGalleryList()
-        .then(render.bind(null, imageList))
-        .catch(util.passNext.bind(null, next));
-    })
-    .catch(util.passNext.bind(null, next));
-
 };
