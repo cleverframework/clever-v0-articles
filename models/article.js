@@ -202,7 +202,7 @@ ArticleSchema.statics = {
     if(category) query.category = category;
 
     const Article = mongoose.model('Article');
-    const options = skip && limit ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
+    const options = skip>=0 && limit>=0 ? {skip: skip, limit: limit} : {skip: 0, limit: 10};
     const defer = Q.defer();
     Article.find(query, {}, options, function(err, articles) {
       if (err) return defer.reject(err);
